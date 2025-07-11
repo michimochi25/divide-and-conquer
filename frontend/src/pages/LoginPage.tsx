@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
+import { GoogleButton } from "../components/GoogleButton";
+import { BackButton } from "../components/BackButton";
 
 const LoginPage = () => {
   const [role, setRole] = useState("");
@@ -8,35 +10,38 @@ const LoginPage = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // Handle form submission logic here
     console.log(`Role selected: ${role}`);
   };
 
   return (
-    <form
-      className="flex flex-col items-center justify-center h-screen w-screen text-xl"
-      onSubmit={handleSubmit}
-    >
-      <div className="flex items-center justify-between mb-4 w-[70%]">
-        <h1>I am a</h1>
-        <div className="flex gap-2">
-          <Button
-            text="STUDENT"
-            onClick={() => setRole("STUDENT")}
-            className="w-48"
-          />
-          <Button
-            text="ADMIN"
-            onClick={() => setRole("ADMIN")}
-            className="w-48"
-          />
+    <div className="flex flex-col items-center justify-center h-screen w-screen text-xl gap-2">
+      <BackButton />
+      <form
+        className="flex flex-col items-center justify-center h-screen w-screen text-xl"
+        onSubmit={handleSubmit}
+      >
+        <div className="flex items-center justify-between mb-4 w-[70%]">
+          <h1>I am a</h1>
+          <div className="flex gap-2">
+            <Button
+              text="STUDENT"
+              onClick={() => setRole("STUDENT")}
+              className={role === "STUDENT" ? "w-48 bg-white/100" : "w-48"}
+            />
+            <Button
+              text="ADMIN"
+              onClick={() => setRole("ADMIN")}
+              className={role === "ADMIN" ? "w-48 bg-white/100" : "w-48"}
+            />
+          </div>
         </div>
-      </div>
-      <div className="flex items-center justify-between mb-4 w-[70%]">
-        <h1>My name is</h1>
-        <Input name="name" placeholder="Name" value={name} setter={setName} />
-      </div>
-    </form>
+        <div className="flex items-center justify-between mb-4 w-[70%]">
+          <h1>My name is</h1>
+          <Input name="name" placeholder="Name" value={name} setter={setName} />
+        </div>
+        <GoogleButton />
+      </form>
+    </div>
   );
 };
 
