@@ -28,6 +28,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-family: "Ubuntu Mono";
 }
 
 h1 {
@@ -57,7 +58,26 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-image: url("./assets/daylight-bg.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: white;
+    background-image: url("./assets/night-bg.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
   a:hover {
     color: #747bff;
