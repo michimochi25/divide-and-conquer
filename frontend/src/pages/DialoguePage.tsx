@@ -1,12 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import { useChapter } from "../ChapterContext";
-import { useEffect } from "react";
-import axios from "axios";
 import { useAuth } from "../AuthContext";
 import { useScene } from "../SceneContext";
 import { ErrorContainer } from "../components/ErrorContainer";
+import { twMerge } from "tailwind-merge";
 
 const QuestionPage = () => {
   const navigate = useNavigate();
@@ -79,13 +77,13 @@ const QuestionPage = () => {
               }}
             >
               <div className="flex flex-row text-center items-center">
-                <img
-                  src={userData?.avatar.toString()}
-                  width={100}
-                  height={100}
-                />
+                <div className="w-15%">
+                  <img
+                    className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
+                  />
+                </div>
                 <div className="flex flex-2 flex-col text-left">
-                  <p className="font-bold text-left text-2xl"> Ricky </p>
+                  <p className="font-bold text-left text-2xl"> {userData?.name} </p>
                   <p className="font-bold text-xl">{dataStory.text}</p>
                 </div>
               </div>

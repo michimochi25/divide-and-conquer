@@ -31,7 +31,7 @@ const CreateChapterForm = ({
       const questions = await generateQuestions();
       await axios.post(`http://localhost:3000/course/${classId}/add-chapter`, {
         title: title,
-        questions: questions,
+        textData: questions,
       });
       setViewForm(false);
       setFile(null);
@@ -48,9 +48,8 @@ const CreateChapterForm = ({
     }
 
     const formData = new FormData();
-    let resData = null;
     formData.append("file", file);
-    fetch("http://localhost:3000/gen", {
+    await fetch("http://localhost:3000/gen", {
       method: "POST",
       body: formData,
     })

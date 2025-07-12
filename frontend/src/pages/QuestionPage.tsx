@@ -27,7 +27,7 @@ const QuestionPage = () => {
 
   const nextPage = (opt_index: number) => {
     if (
-      dataStory[index].options[opt_index] === dataStory[index].correctAnswer
+      dataStory[index].options[opt_index].includes(dataStory[index].correctAnswer)
     ) {
       setSceneData(index + 1);
     } else {
