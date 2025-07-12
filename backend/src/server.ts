@@ -12,7 +12,7 @@ const startServer = async () => {
     await connectDb();
 
     app.listen(port, () => {
-      console.log(`Example app listening on port ${port}`);
+      console.log(`Listening on port ${port}`);
     });
 
     app.use(express.json());
@@ -32,6 +32,24 @@ const startServer = async () => {
         res.status(400).json({ error: err.message });
       }
     });
+
+    app.post(
+      "/add-course",
+      async function addCourse(req: Request, res: Response) {
+        try {
+          const { userId, title, description, chapters } = req.body;
+          const resp = await authService.addCourse(
+            userId,
+            title,
+            description,
+            chapters
+          );
+          res.json(resp);
+        } catch (err: any) {
+          res.status(400).json({ error: err.message });
+        }
+      }
+    );
 
     app.get(
       "/user/:userId",

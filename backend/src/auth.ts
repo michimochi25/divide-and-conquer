@@ -28,7 +28,6 @@ export async function authRegister(
     name: name,
     email: email,
     createdAt: new Date(),
-    lastSeen: new Date(),
     isAdmin: isAdmin,
   };
 
@@ -60,8 +59,6 @@ export async function checkEmailExists(email: string) {
     email: email,
   });
 
-  console.log("Checking email:", email, "Found user:", user);
-
   if (!user || user === undefined) {
     return { exists: false, userId: null };
   }
@@ -73,10 +70,10 @@ export async function addCourse(
   userId: string,
   title: string,
   description: string,
-  chapter: string
+  chapters: string[]
 ) {
   const user = await usersCollection.findOne({
-    userId: userId,
+    _id: new ObjectId(userId),
   });
 
   if (!user || user === undefined) {
@@ -91,9 +88,8 @@ export async function addCourse(
     title: title,
     description: description,
     createdAt: new Date(),
-    lastSeen: new Date(),
     userId: userId,
-    chapter: chapter,
+    chapters: chapters,
   };
 
   await coursesCollection.insertOne(course);

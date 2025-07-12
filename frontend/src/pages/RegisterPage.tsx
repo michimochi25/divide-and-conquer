@@ -23,7 +23,7 @@ const RegisterPage = () => {
       });
       console.log("Registration successful", resp.data);
 
-      navigate(`/user/${resp.data.userId}`); // Navigate to user page with the new user ID
+      navigate(`/user/${resp.data.userId}`);
     } catch (error) {
       console.error("Registration failed:", error);
     }

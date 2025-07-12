@@ -4,51 +4,15 @@ import { ClassCard } from "../components/ClassCard";
 import { useNavigate } from "react-router-dom";
 import CreateClassForm from "../components/CreateClassForm";
 
-type ClassData = {
+export type ClassData = {
   _id: string;
   title: string;
   description: string;
-  chapters: number;
+  chapters: string[];
 };
 
 const ClassPage = () => {
-  const [data, setData] = useState<ClassData[]>([
-    {
-      _id: "1",
-      title: "COMP6080",
-      description:
-        "Learn the basics of React, a popular JavaScript library for building user interfaces.",
-      chapters: 5,
-    },
-    {
-      _id: "2",
-      title: "COMP6081",
-      description:
-        "Explore advanced patterns and techniques in React development.",
-      chapters: 8,
-    },
-    {
-      _id: "3",
-      title: "COMP6082",
-      description:
-        "Understand how to manage state in large applications using Redux.",
-      chapters: 6,
-    },
-    {
-      _id: "4",
-      title: "COMP6082",
-      description:
-        "Understand how to manage state in large applications using Redux.",
-      chapters: 6,
-    },
-    {
-      _id: "5",
-      title: "COMP6082",
-      description:
-        "Understand how to manage state in large applications using Redux.",
-      chapters: 6,
-    },
-  ]);
+  const [data, setData] = useState<ClassData[]>([]);
   const [showForm, setShowForm] = useState(false);
 
   const navigate = useNavigate();
@@ -61,7 +25,7 @@ const ClassPage = () => {
         <p>My Classes</p>
       </div>
       {showForm ? (
-        <CreateClassForm />
+        <CreateClassForm setData={setData} setShowForm={setShowForm} />
       ) : (
         <div className="container flex flex-1 gap-4 overflow-auto w-140 flex-col sm:flex-row">
           {data.map((item) => (
@@ -69,7 +33,7 @@ const ClassPage = () => {
               key={item._id}
               title={item.title}
               description={item.description}
-              chapters={item.chapters}
+              chapters={item.chapters.length}
               onClick={() => navigate(`${url}/${item._id}`)}
             />
           ))}
