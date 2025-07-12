@@ -145,7 +145,7 @@ export async function addChapter(
 
   // Prepare the update operation. This is now pushing an ObjectId.
   const update = {
-    $push: { chapters: chapterId },
+    $put: { chapters: chapterId },
   };
 
   // Execute the atomic update
