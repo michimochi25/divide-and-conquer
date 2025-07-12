@@ -9,8 +9,6 @@ import {
 } from "./storyGenerator";
 import { ObjectId } from "mongodb";
 
-import { UpdateFilter } from "mongodb";
-import { Course } from "./interface";
 
 function isValidName(name: string): string | boolean {
   if (name.length > 100) {

@@ -20,9 +20,10 @@ const CustomGoogleLogin = () => {
         const resp = await axios.get(
           `http://localhost:3000/user/email/${userInfoRes.data.email}`
         );
+
         if (resp.data.exists) {
           console.log("User exists, navigating to user page");
-          navigate(`/user/${resp.data._id}`);
+          navigate(`/user/${resp.data.userId}`);
         } else {
           navigate("/register", {
             state: { email: userInfoRes.data.email },
