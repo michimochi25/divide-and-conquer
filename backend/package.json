@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "start": "npx ts-node src/server.ts",
+    "dev": "nodemon --exec npx ts-node src/index.ts",
+    "build": "tsc"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
