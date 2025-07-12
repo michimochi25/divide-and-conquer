@@ -6,7 +6,7 @@ import axios from "axios";
 
 const CustomGoogleLogin = () => {
   const navigate = useNavigate();
-  const { setUserId } = useAuth();
+  const { setUserId, setIsAdmin } = useAuth();
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -27,6 +27,8 @@ const CustomGoogleLogin = () => {
         if (resp.data.exists) {
           console.log("User exists, navigating to user page");
           navigate(`/user/${resp.data.userId}`);
+          console.log("User ID:", resp.data.userId);
+          console.log("Resp data:", resp.data);
           setUserId(resp.data.userId);
         } else {
           navigate("/register", {

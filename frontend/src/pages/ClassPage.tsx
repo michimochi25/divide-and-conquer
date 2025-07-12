@@ -1,24 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { ChapterCard } from "../components/ChapterCard";
+import { useLocation, useParams } from "react-router-dom";
+import type { Chapter } from "../../../backend/src/storyGenerator";
+
+import axios from "axios";
 
 const ClassPage = () => {
-  const [chapters, setChapters] = useState([
-    "Chapter 1: Introduction of Mathematics",
-    "Chapter 2: Algebra Basics",
-    "Chapter 3: Geometry Fundamentals",
-    "Chapter 4: Calculus Concepts",
-  ]);
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const data = useLocation().state?.data || { title: "Not Found" };
+  const classId = useParams().classId || data._id;
+
+  const fetchChapters = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/course/${classId}/chapters/`
+      );
+      console.log("Fetched chapters:", response.data);
+      setChapters(response.data.chapters);
+    } catch (error) {
+      console.error("Error fetching chapters:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchChapters();
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-between h-full gap-4">
       <div className="flex items-center text-3xl font-bold mb-4 gap-4 justify-between w-full">
         <Button text="+" onClick={() => {}} />
-        <p>MATH1231</p>
+        <p className="text-xl">{classId}</p>
+        <p>{data.title}</p>
       </div>
       <div className="container flex flex-col gap-4 overflow-auto w-140">
         {chapters.map((chapter, index) => (
-          <ChapterCard key={index} title={chapter} onClick={() => {}} />
+          <ChapterCard key={index} title={chapter.title} onClick={() => {}} />
         ))}
       </div>
     </div>

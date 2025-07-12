@@ -37,13 +37,8 @@ const startServer = async () => {
       "/add-course",
       async function addCourse(req: Request, res: Response) {
         try {
-          const { userId, title, description, chapters } = req.body;
-          const resp = await authService.addCourse(
-            userId,
-            title,
-            description,
-            chapters
-          );
+          const { userId, title, description } = req.body;
+          const resp = await authService.addCourse(userId, title, description);
           res.json(resp);
         } catch (err: any) {
           res.status(400).json({ error: err.message });
@@ -102,7 +97,7 @@ const startServer = async () => {
         }
       }
     );
-
+    /*
     app.post(
       "/course/add-chapter/:courseId",
       async function addChapter(req: Request, res: Response) {
@@ -119,6 +114,21 @@ const startServer = async () => {
           ];
           const auth = await authService.addChapter(courseId, title, questions);
           res.json(auth);
+        } catch (err: any) {
+          res.status(400).json({ error: err.message });
+        }
+      }
+    );
+    */
+
+    app.put(
+      "/user/:userId/courses",
+      async function enrollClass(req: Request, res: Response) {
+        try {
+          const userId = req.params.userId;
+          const { courseId } = req.body;
+          const resp = await authService.enrollClass(userId, courseId);
+          res.json(resp);
         } catch (err: any) {
           res.status(400).json({ error: err.message });
         }

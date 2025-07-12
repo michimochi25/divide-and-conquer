@@ -4,6 +4,7 @@ import { Container } from "../components/Container";
 import RoleBar from "../components/RoleBar";
 import sprite from "../assets/characters.png";
 import { useEffect, useState } from "react";
+import { useAuth } from "../AuthContext";
 
 type User = {
   name: string;
@@ -23,6 +24,7 @@ const AdminPage = () => {
     lastSeen: new Date(),
   });
   const userId = useParams().userId;
+  const { setUserId, setIsAdmin } = useAuth();
 
   const getUser = async () => {
     try {
@@ -32,6 +34,8 @@ const AdminPage = () => {
       }
       const userData = await response.json();
       setUserData(userData.user);
+      setUserId(userData.user._id);
+      setIsAdmin(userData.user.isAdmin);
     } catch (error) {
       console.error("Failed to fetch user data:", error);
     }

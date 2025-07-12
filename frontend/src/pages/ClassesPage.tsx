@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { ClassCard } from "../components/ClassCard";
 import { useNavigate } from "react-router-dom";
 import CreateClassForm from "../components/CreateClassForm";
+import axios from "axios";
+import { useAuth } from "../AuthContext";
 
-export type ClassData = {
+type ClassData = {
   _id: string;
   title: string;
   description: string;
@@ -14,9 +16,31 @@ export type ClassData = {
 const ClassPage = () => {
   const [data, setData] = useState<ClassData[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const { userId, isAdmin } = useAuth();
 
   const navigate = useNavigate();
   const url = window.location.pathname;
+
+  const updateData = async () => {
+    // Fetch the classes for the user
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/user/${userId}/courses`
+      );
+
+      if (response.data && Array.isArray(response.data.courses)) {
+        setData(response.data.courses);
+      } else {
+        console.error("Unexpected data format:", response.data.courses);
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
+
+  useEffect(() => {
+    updateData();
+  }, []);
 
   return (
     <div className="flex flex-col items-center gap-4 justify-between h-full">
@@ -25,16 +49,22 @@ const ClassPage = () => {
         <p>My Classes</p>
       </div>
       {showForm ? (
-        <CreateClassForm setData={setData} setShowForm={setShowForm} />
+        <CreateClassForm
+          setShowForm={setShowForm}
+          updateData={updateData}
+          isAdmin={isAdmin}
+        />
       ) : (
         <div className="container flex flex-1 gap-4 overflow-auto w-140 flex-col sm:flex-row">
-          {data.map((item) => (
+          {data.map((item, index) => (
             <ClassCard
               key={item._id}
               title={item.title}
               description={item.description}
               chapters={item.chapters.length}
-              onClick={() => navigate(`${url}/${item._id}`)}
+              onClick={() =>
+                navigate(`${url}/${item._id}`, { state: { data: data[index] } })
+              }
             />
           ))}
         </div>
