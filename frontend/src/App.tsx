@@ -13,27 +13,48 @@ import DialoguePage from "./pages/DialoguePage";
 import AuthWrapper from "./AuthWrapper";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import ErrorPage from "./pages/ErrorPage";
+import UnauthenticatedPage from "./pages/UnauthenticatedPage";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route
+        path="/"
+        element={
+          <AuthWrapper>
+            {/* <UnauthenticatedPage> */}
+            <LandingPage />
+            {/* </UnauthenticatedPage> */}
+          </AuthWrapper>
+        }
+      />
       <Route
         path="/signin"
         element={
           <AuthWrapper>
+            {/* <UnauthenticatedPage> */}
             <GooglePage />
+            {/* </UnauthenticatedPage> */}
           </AuthWrapper>
         }
       />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/register"
+        element={
+          <AuthWrapper>
+            {/* <UnauthenticatedPage> */}
+            <RegisterPage />
+            {/* </UnauthenticatedPage> */}
+          </AuthWrapper>
+        }
+      />
       <Route
         path="/question"
         element={
           <AuthWrapper>
-            <ProtectedRoute>
-              <QuestionPage />
-            </ProtectedRoute>
+            {/* <ProtectedRoute> */}
+            <QuestionPage />
+            {/* </ProtectedRoute> */}
           </AuthWrapper>
         }
       />
@@ -41,9 +62,9 @@ function App() {
         path="/dialogue"
         element={
           <AuthWrapper>
-            <ProtectedRoute>
-              <DialoguePage />
-            </ProtectedRoute>
+            {/* <ProtectedRoute> */}
+            <DialoguePage />
+            {/* </ProtectedRoute> */}
           </AuthWrapper>
         }
       />
@@ -51,9 +72,9 @@ function App() {
         path="/user/:userId"
         element={
           <AuthWrapper>
-            <ProtectedRoute>
-              <AccountLayout />
-            </ProtectedRoute>
+            {/* <ProtectedRoute> */}
+            <AccountLayout />
+            {/* </ProtectedRoute> */}
           </AuthWrapper>
         }
       >
