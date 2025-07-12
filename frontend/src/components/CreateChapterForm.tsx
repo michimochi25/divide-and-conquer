@@ -23,6 +23,7 @@ const CreateChapterForm = () => {
     }
 
     const formData = new FormData();
+    let resData = null;
     formData.append("file", file);
     fetch("http://localhost:3000/gen", {
       method: "POST",
@@ -31,10 +32,13 @@ const CreateChapterForm = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("File processed successfully:", data);
+        resData = data;
       })
       .catch((error) => {
         console.error("Error processing file:", error);
       });
+
+    
   };
 
   return (

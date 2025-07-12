@@ -125,10 +125,12 @@ export function integrateChallengesIntoStory(
 ): StoryDataItem[] {
   const fullStory: StoryDataItem[] = [];
   const sceneCount = storyData.length;
+  let questionIndex = 0;
   for (let i = 0; i < sceneCount; i++) {
     fullStory.push(storyData[i]);
-    if (questions[i] && storyData[i].challange == "true") {
-      const question = questions[i];
+    if (storyData[i].challange == "true") {
+      console.log(questionIndex, questions, questions[questionIndex]);
+      const question = questions[questionIndex];
       const challenge: Challenge = {
         type: "challenge",
         challengeText: question.questionText,
@@ -136,6 +138,7 @@ export function integrateChallengesIntoStory(
         correctAnswer: question.correctAnswer,
       };
       fullStory.push(challenge);
+      questionIndex += 1;
     }
   }
   return fullStory;
