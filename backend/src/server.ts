@@ -13,8 +13,27 @@ app.post("/upload", upload.single("file"), function (req, res) {
 
 app.post("/register", async function register(req: Request, res: Response) {
   try {
-    const { name, email, password } = req.body;
-    const auth = await authService.authRegister(name, email, password);
+    const { name, email, isAdmin } = req.body;
+    const auth = await authService.authRegister(name, email, isAdmin);
+    res.json(auth);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post("/add-chapter/:courseId", async function addCourse(req: Request, res: Response) {
+  try {
+    const { title } = req.body;
+    const courseId = req.params.courseId;
+    const question = [
+      {
+        questionText: "which one is better?",
+        options: ["apple", "banana", "exam", "holiday"],
+        correctAnswer: "exam",
+      },
+    ];
+
+    const auth = await authService.addChapter(courseId, title, question);
     res.json(auth);
   } catch (err: any) {
     res.status(400).json({ error: err.message });

@@ -40,6 +40,13 @@ export async function connectDb() {
         courses: [],
       });
     }
+
+    const chaptersCount = await chaptersCollection.countDocuments();
+    if (chaptersCount === 0) {
+      await chaptersCollection.insertOne({
+        chapters: [],
+      });
+    }
   } catch (error) {
     console.error("Error found when connecting to MongoDB: ", error);
   }

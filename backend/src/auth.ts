@@ -1,7 +1,14 @@
 import { v4 as uuidv4 } from "uuid";
-import { usersCollection, coursesCollection } from "./db";
+import { usersCollection, coursesCollection, chaptersCollection } from "./db";
+import {
+  Chapter,
+  Question,
+  generateCharacterImage,
+  generateStoryScenes,
+  integrateChallengesIntoStory,
+} from "./storyGenerator";
 
-function isValidName(name: String): string | boolean {
+function isValidName(name: string): string | boolean {
   if (name.length > 100) {
     return "NAME_TOO_LONG";
   }
@@ -22,20 +29,20 @@ export async function authRegister(
     throw new Error(isValidName(name) as string);
   }
 
-  const userId = uuidv4();
-
   // Create user
   const user = {
     name: name,
     email: email,
     createdAt: new Date(),
     lastSeen: new Date(),
-    userId: userId,
     isAdmin: isAdmin,
   };
 
+  let userId = null;
   // Add user to MongoDB
-  await usersCollection.insertOne(user);
+  await usersCollection.insertOne(user).then((result) => {
+    userId = result.insertedId;
+  });
   return userId;
 }
 
@@ -54,8 +61,7 @@ export async function getUser(userId: string) {
 export async function addCourse(
   userId: string,
   title: string,
-  description: string,
-  chapter: string
+  description: string
 ) {
   const user = await usersCollection.findOne({
     userId: userId,
@@ -68,30 +74,52 @@ export async function addCourse(
   if (!user.isAdmin) {
     throw new Error("USER_DOES_NOT_HAVE_ACCESS");
   }
-
+  const courseId = uuidv4();
   const course = {
     title: title,
     description: description,
     createdAt: new Date(),
     lastSeen: new Date(),
     userId: userId,
-    chapter: chapter,
+    courseId: courseId,
+    chapters: [],
   };
 
   await coursesCollection.insertOne(course);
   return userId;
 }
 
-// export async function getAllCourse(userId: string) {
-//   const user = await usersCollection.findOne({
-//     userId: userId,
-//   });
+export async function addChapter(
+  courseId: string,
+  title: string,
+  questions: Question[]
+) {
+  const scenes = await generateStoryScenes(title, questions.length);
 
-//   if (!user || user === undefined) {
-//     throw new Error("USER_DOES_NOT_EXIST");
-//   }
+  if (!scenes || scenes.length === 0) {
+    throw new Error("Scene generation failed, cannot create chapter.");
+  }
 
-//   const courses = await use
+  for (const scene of scenes) {
+    if (scene.character) {
+      const imageUrl = await generateCharacterImage(scene.character);
+      if (imageUrl) {
+        scene.characterImageUrl = imageUrl;
+      }
+    }
+  }
 
-//   return { user: user };
-// }
+  const finalStoryData = integrateChallengesIntoStory(scenes, questions);
+  const chapter: Chapter = {
+    courseId: courseId,
+    title: title,
+    createdAt: new Date(),
+    lastSeen: new Date(),
+    question: questions,
+    storyData: finalStoryData,
+  };
+
+  console.log("[Backend] Chapter object created successfully.");
+  // await chaptersCollection.insertOne(chapter);
+  return chapter;
+}
