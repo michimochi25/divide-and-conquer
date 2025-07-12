@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { spawn } from 'child_process';
 
 interface GeminiTtsResponse {
     candidates: {
@@ -14,7 +15,7 @@ interface GeminiTtsResponse {
 
 export async function genSpeech(text: string): Promise<string> {
     const model = "gemini-2.5-flash-preview-tts";
-    const apiKey = "AIzaSyCkill1F5-Qkr06Gt1v_oiNumZC_JYrxaI";
+    const apiKey = "AIzaSyDcsDlMebamNJp3h9KGGP6ECLYS7DArxgY";
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
     const textWithInstructions = `TTS the following conversation between Joe and Jane: ${text}`;
@@ -81,4 +82,49 @@ export async function genSpeech(text: string): Promise<string> {
         console.error("[TTS Service] Error generating speech:", error);
         throw error;
     }
+}
+
+function convertPcmToWav(pcmBuffer: Buffer): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+        const ffmpeg = spawn('ffmpeg', [
+            '-f', 's16le',
+            '-ar', '24000',
+            '-ac', '1',
+            '-i', 'pipe:0',
+            '-f', 'wav',
+            'pipe:1'
+        ]);
+
+        const wavChunks: Buffer[] = [];
+
+        ffmpeg.stdout.on('data', (chunk) => {
+            wavChunks.push(chunk);
+        });
+
+        ffmpeg.stderr.on('data', (data) => {
+            console.error(`[ffmpeg stderr]: ${data}`);
+        });
+
+        ffmpeg.on('close', (code) => {
+            if (code === 0) {
+                resolve(Buffer.concat(wavChunks));
+            } else {
+                reject(new Error(`ffmpeg process exited with code ${code}`));
+            }
+        });
+
+        ffmpeg.on('error', (err) => {
+            reject(new Error(`Failed to start ffmpeg process: ${err.message}`));
+        });
+
+        ffmpeg.stdin.write(pcmBuffer);
+        ffmpeg.stdin.end();
+    });
+}
+
+export async function generateWavAudio(text: string): Promise<Buffer> {
+    const base64Audio = await genSpeech(text);
+    const pcmBuffer = Buffer.from(base64Audio, 'base64');
+    const wavBuffer = await convertPcmToWav(pcmBuffer);
+    return wavBuffer;
 }
