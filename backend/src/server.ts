@@ -106,15 +106,20 @@ app.post(
   "/course/:courseId/add-chapter",
   async function addChapter(req: Request, res: Response) {
     try {
-      const { title } = req.body;
+      const { title, textData } = req.body;
       const courseId = req.params.courseId;
-      const questions = [
-        {
-          questionText: "aa",
-          options: ["a", "b"],
-          correctAnswer: "a",
-        },
-      ];
+
+      // console.log(questions);
+      // const questions = [
+      //   {
+      //     questionText: "aa",
+      //     options: ["a", "b"],
+      //     correctAnswer: "a",
+      //   },
+      // ];
+
+      const questions = await generateQuestions(textData, 8);
+      console.log(questions);
       const auth = await authService.addChapter(courseId, title, questions);
       res.json(auth);
     } catch (err: any) {
@@ -141,8 +146,10 @@ app.post("/gen", upload.single("file"), async (req: Request, res: Response) => {
     if (!textData) {
       return res.status(400).json({ error: "Could not extract text." });
     }
-    const questions = await generateQuestions(textData, 8);
-    res.json(questions);
+    // const questions = await generateQuestions(textData, 8);
+    // res.json(questions);
+
+    res.json(textData)
   } catch (err: any) {
     console.error("Error processing file:", err);
     res.status(500).json({ error: `Failed to process file: ${err.message}` });

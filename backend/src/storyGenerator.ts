@@ -36,13 +36,15 @@ export async function generateStoryScenes(
   questionNum: number
 ): Promise<Scene[]> {
   console.log(`[Backend] Generating ${count} scenes for topic: "${topic}"...`);
-  const userPrompt = `Generate a short story about "${topic}". 
-    Break the story down into exactly ${count} continuous scenes, included ${questionNum} challanges scenes existed, and 
+  const userPrompt = `Generate a short story which has genre mystical and fantasy. 
+    Break the story down into exactly ${
+      count + questionNum
+    } continuous scenes, included ${questionNum} challanges scenes existed, and 
     the story should be ended in the last scene. For each scene, 
-    provide a descriptive background, a villain character from my enum (monster, valak, or not at all (so the villain shud not necesserally appear in each scene)),
+    provide a descriptive background, a villain character from my enum (monster-lizard, valak, lavacorn, goblin, dragon, or not at all (so the villain shud not necesserally appear in each scene)),
     and the scene text. If no character is present, the character should be 
-    null. If the scene trigger a challange event (could be anything that require big action) provide the information about 
-    that in field challange (e.g. the event trigger a battle in the next scene, then it should tell the this scene trigger a challange).
+    null. If the scene trigger a challange event (could be anything that require big action like battle with the villain) provide the information about 
+    that in field challange (e.g. the event trigger a battle in the next scene, then it should tell the this scene trigger a challange), tell the main character that they need to solve the challange in the next scene to kill the monster.
     The story should be in second person Point of View (You) (reader as the main character). Limit the scene into 3-5 sentences each.
     Ensure the output is a valid JSON array.`;
 
@@ -67,7 +69,14 @@ export async function generateStoryScenes(
               type: "STRING",
               description:
                 "A detailed description of the character in the scene, or null.",
-              enum: ["monster", "valak", "null"],
+              enum: [
+                "monster-lizard",
+                "valak",
+                "dark-unicorn-lavacorn",
+                "goblin",
+                "dragon",
+                "null",
+              ],
             },
             text: {
               type: "STRING",
