@@ -2,8 +2,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import RoleBar from "../components/RoleBar";
-import { useEffect, useState } from "react";
-import { useAuth, type User } from "../AuthContext";
+import { useEffect } from "react";
+import { useAuth } from "../AuthContext";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
 
@@ -56,7 +56,7 @@ const AccountPage = () => {
             </div>
           }
         />
-        <div className="flex flex-col gap-5 flex-1">
+        <div className="flex flex-col gap-5 flex-1 items-center">
           <RoleBar
             role={`${userData?.isAdmin ? "Admin" : "Student"}`}
             points={100}

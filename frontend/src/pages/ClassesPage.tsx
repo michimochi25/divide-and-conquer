@@ -25,7 +25,7 @@ const ClassPage = () => {
     // Fetch the classes for the user
     try {
       const response = await axios.get(
-        `http://localhost:3000/user/${userData?.userId}/courses`
+        `http://localhost:3000/user/${userData?._id}/courses`
       );
 
       if (response.data && Array.isArray(response.data.courses)) {
@@ -61,7 +61,7 @@ const ClassPage = () => {
               key={item._id}
               title={item.title}
               description={item.description}
-              chapters={item.chapters.length}
+              chapters={item.chapters?.length ?? 0}
               onClick={() =>
                 navigate(`${url}/${item._id}`, { state: { data: data[index] } })
               }

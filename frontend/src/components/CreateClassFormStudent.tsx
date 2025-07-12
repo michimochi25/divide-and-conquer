@@ -17,13 +17,13 @@ const CreateClassFormStudent = ({
   updateData: () => void;
 }) => {
   const [id, setId] = useState("");
-  const { userId } = useAuth();
+  const { userData } = useAuth();
 
   const handleEnrolClass = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:3000/user/${userId}/courses`,
+        `http://localhost:3000/user/${userData?._id}/courses`,
         {
           courseId: id,
         }

@@ -43,7 +43,7 @@ const CreateChapterForm = () => {
         children={
           <>
             <div
-              className="w-full h-full p-5 flex flex-col justify-center items-center gap-3 cursor-pointer"
+              className="w-full h-full p-1 flex flex-col justify-center items-center gap-3 cursor-pointer"
               onClick={() => fileInputRef.current?.click()}
             >
               <p className="w-94 text-center">

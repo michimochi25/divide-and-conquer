@@ -76,6 +76,16 @@ app.get(
   }
 );
 
+app.post("/add-course", async function addCourse(req: Request, res: Response) {
+  try {
+    const { userId, title, description } = req.body;
+    const resp = await authService.addCourse(userId, title, description);
+    res.json(resp);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 app.post(
   "/course/add-chapter/:courseId",
   async function addChapter(req: Request, res: Response) {
