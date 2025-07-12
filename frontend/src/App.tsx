@@ -12,6 +12,7 @@ import QuestionPage from "./pages/QuestionPage";
 import DialoguePage from "./pages/DialoguePage";
 import AuthWrapper from "./AuthWrapper";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
           <Route path=":classId" element={<ClassPage />} />
         </Route>
       </Route>
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 }
