@@ -73,7 +73,7 @@ const AccountPage = () => {
                 if (userData) {
                   setUserData({
                     ...userData,
-                    avatar: Math.max((userData.avatar || 5) - 1, 0),
+                    avatar: (userData.avatar - 1) % 8,
                   });
                 }
               }}
@@ -82,10 +82,7 @@ const AccountPage = () => {
             </span>
             <div className="w-15%">
               <img
-                className={twMerge(
-                  "sprite ",
-                  `sprite-${userData?.avatar || 5}`
-                )}
+                className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
               />
             </div>
             <span
@@ -98,7 +95,7 @@ const AccountPage = () => {
                 if (userData) {
                   setUserData({
                     ...userData,
-                    avatar: Math.min((userData.avatar || 5) + 1, 6),
+                    avatar: (userData.avatar + 1) % 8,
                   });
                 }
               }}
