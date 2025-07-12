@@ -4,6 +4,7 @@ import { Input } from "../components/Input";
 import { BackButton } from "../components/BackButton";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../AuthContext";
 
 const RegisterPage = () => {
   const [role, setRole] = useState("");
@@ -11,6 +12,7 @@ const RegisterPage = () => {
 
   const location = useLocation();
   const { email } = location.state;
+
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -23,7 +25,7 @@ const RegisterPage = () => {
       });
       console.log("Registration successful", resp.data);
 
-      navigate(`/user/${resp.data.userId}`); // Navigate to user page with the new user ID
+      navigate(`/user/${resp.data.userId}`);
     } catch (error) {
       console.error("Registration failed:", error);
     }

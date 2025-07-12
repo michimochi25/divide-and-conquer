@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
-
 import { usersCollection, coursesCollection, chaptersCollection } from "./db";
 import {
   Chapter,
@@ -8,7 +6,6 @@ import {
   integrateChallengesIntoStory,
 } from "./storyGenerator";
 import { ObjectId } from "mongodb";
-
 
 function isValidName(name: string): string | boolean {
   if (name.length > 100) {
@@ -34,9 +31,11 @@ export async function authRegister(
   // Create user
   const user = {
     name: name,
+    avatar: 5,
     email: email,
     createdAt: new Date(),
     isAdmin: isAdmin,
+    courses: [], // if admin: courses created by admin, if student: courses enrolled in
   };
 
   // Add user to MongoDB
@@ -56,7 +55,7 @@ export async function getUser(userId: string) {
   const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
 
   if (!user || user === undefined) {
-    throw new Error("USER_DOES_NOT_EXIST");
+    throw new Error(`ID ${userId} USER_DOES_NOT_EXIST`);
   }
 
   return { user: user };
@@ -66,8 +65,6 @@ export async function checkEmailExists(email: string) {
   const user = await usersCollection.findOne({
     email: email,
   });
-
-  console.log("Checking email:", email, "Found user:", user);
 
   if (!user || user === undefined) {
     return { exists: false, userId: null };
@@ -82,27 +79,28 @@ export async function addCourse(
   description: string
 ) {
   const user = await usersCollection.findOne({
-    userId: userId,
+    _id: new ObjectId(userId),
   });
 
   if (!user || user === undefined) {
-    throw new Error("USER_DOES_NOT_EXIST");
+    throw new Error(`ID ${userId} USER_DOES_NOT_EXIST`);
   }
 
   if (!user.isAdmin) {
     throw new Error("USER_DOES_NOT_HAVE_ACCESS");
   }
-  const courseId = uuidv4();
+
   const course = {
     title: title,
     description: description,
     createdAt: new Date(),
     userId: userId,
-    courseId: courseId,
     chapters: [],
   };
 
-  await coursesCollection.insertOne(course);
+  const result = await coursesCollection.insertOne(course);
+  const courseId = result.insertedId.toString();
+  await enrollClass(userId, courseId);
   return userId;
 }
 
@@ -136,12 +134,10 @@ export async function addChapter(
   // // Find the course to update
   // const filter = { courseId: courseId }; // Usually you filter by the course's _id
 
-  // // Prepare the update operation. This is now pushing an ObjectId.
-  // const update: UpdateFilter<Course> = {
-  //   $set: {
-  //     chapters: chapterId,
-  //   },
-  // };
+  // Prepare the update operation. This is now pushing an ObjectId.
+  const update = {
+    $put: { chapters: chapterId },
+  };
 
   // // Execute the atomic update
   // await coursesCollection.findOneAndUpdate(filter, update);
@@ -164,14 +160,43 @@ export async function getAllChapter(courseId: string) {
       courseId: courseId,
     })
     .toArray();
-
   return { chapters: chapter };
 }
 
-export async function getChapter(chapterId: string) {
-  const chapter = await chaptersCollection.findOne({
-    _id: new ObjectId(chapterId),
+export async function enrollClass(userId: string, courseId: string) {
+  const user = await usersCollection.findOne({
+    _id: new ObjectId(userId),
   });
 
-  return { chapters: chapter };
+  if (!user || user === undefined) {
+    throw new Error("USER_DOES_NOT_EXIST");
+  }
+
+  const currCourses = user.courses || [];
+  if (currCourses.includes(courseId)) {
+    throw new Error("USER_ALREADY_ENROLLED");
+  }
+
+  currCourses.push(courseId);
+  const result = await usersCollection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $set: { courses: currCourses } }
+  );
+
+  if (result.modifiedCount === 0) {
+    throw new Error("FAILED_TO_UPDATE_USER");
+  }
+
+  return { success: true };
+}
+
+export async function getChapter(chapterId: string) {
+  const chapter = await chaptersCollection.findOne({ _id: new ObjectId(chapterId) });
+
+  console.log("Backend", chapter);
+  if (!chapter || chapter === undefined) {
+    throw new Error(`ID ${chapterId} USER_DOES_NOT_EXIST`);
+  }
+
+  return { chapter: chapter };
 }

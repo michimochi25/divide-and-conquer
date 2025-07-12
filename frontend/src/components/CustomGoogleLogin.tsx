@@ -1,10 +1,13 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { GoogleButton } from "./GoogleButton";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 import axios from "axios";
 
 const CustomGoogleLogin = () => {
   const navigate = useNavigate();
+  const { setUserId, setIsAdmin } = useAuth();
+
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -24,6 +27,9 @@ const CustomGoogleLogin = () => {
         if (resp.data.exists) {
           console.log("User exists, navigating to user page");
           navigate(`/user/${resp.data.userId}`);
+          console.log("User ID:", resp.data.userId);
+          console.log("Resp data:", resp.data);
+          setUserId(resp.data.userId);
         } else {
           navigate("/register", {
             state: { email: userInfoRes.data.email },

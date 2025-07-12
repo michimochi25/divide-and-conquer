@@ -4,7 +4,7 @@
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "mongodb": "^6.17.0",
-    "openai": "^5.9.0",
+    "pdf-parse": "^1.1.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -13,6 +13,7 @@
     "@types/mime": "^3.0.4",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.0.13",
+    "@types/pdf-parse": "^1.1.5",
     "multer": "^2.0.1",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",

@@ -9,6 +9,7 @@ import ClassPage from "./pages/ClassPage";
 import RegisterPage from "./pages/RegisterPage";
 import GooglePage from "./pages/GooglePage";
 import QuestionPage from "./pages/QuestionPage";
+import DialoguePage from "./pages/DialoguePage";
 
 function App() {
   return (
@@ -16,8 +17,8 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/signin" element={<GooglePage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path=":chapterId/question/" element={<QuestionPage />} />
-      <Route path="/dialogue/:index" element={<QuestionPage />} />
+      <Route path="/:chapterId/question" element={<QuestionPage />} />
+      <Route path="/:chapterId/dialogue" element={<DialoguePage />} />
       <Route path="/user/:userId" element={<AccountLayout />}>
         <Route index element={<AccountPage />} />
         <Route path="classes" element={<ClassLayout />}>

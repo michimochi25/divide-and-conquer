@@ -1,9 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
-import monsterImg from "../assets/monster.png";
+import { useChapter } from "../ChapterContext";
+import { useEffect } from "react";
+import axios from "axios";
+import { useScene } from "../SceneContext";
 
-const dataStory = [
+const dataStories = [
   {
     background: "day",
     character: "valak",
@@ -49,38 +52,56 @@ const dataStory = [
 
 const QuestionPage = () => {
   const navigate = useNavigate();
+  const { chapterData, setChapterData } = useChapter();
+  const { SceneData, setSceneData } = useScene();
+  const chapterId = useParams().chapterId;
+  const getChapter = async () => {
+    try {
+      console.log(chapterId);
+      const response = await axios.get(
+        `http://localhost:3000/chapter/${chapterId}`
+      );
 
-  // const getUser = async () => {
-  //   try {
-  //     const response = await fetch(`http://localhost:3000/user/${userId}`);
-  //     if (!response.ok) {
-  //       throw new Error("NETWORK_ERROR");
-  //     }
-  //     const userData = await response.json();
-  //     setUserData(userData.user);
-  //   } catch (error) {
-  //     console.error("Failed to fetch user data:", error);
-  //   }
-  // };
+      const userData = response.data;
 
-  const index = 1;
+      setChapterData(userData.chapter.storyData);
+
+      console.log(userData);
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("1", chapterId);
+    getChapter();
+  }, [chapterId, setChapterData]);
+
+  const index = SceneData;
   function getImageUrl(name: string | undefined) {
     if (name === undefined) return;
     return new URL(`../assets/${name}.png`, import.meta.url).href;
   }
 
+  if (!chapterData || chapterData === undefined) {
+    return <div>Loading...</div>; // Or a loading spinner component
+  }
+
+  const dataStory = chapterData;
   // 2. Use the function in your component
-  const monsterName = dataStory[index + 1].character; // This can be dynamic (e.g., from state)
+  const monsterName = dataStory[index].character; // This can be dynamic (e.g., from state)
   const monsterImg = getImageUrl(monsterName);
 
   const nextPage = (opt_index: number) => {
     if (
       dataStory[index].options[opt_index] === dataStory[index].correctAnswer
     ) {
-      navigate(`/dialogue/${index + 1}/`);
+      setSceneData(index + 1);
     } else {
-      navigate(`/dialogue/${index - 1}/`);
+      setSceneData(index - 1);
     }
+
+    navigate(`/${chapterId}/dialogue`);
   };
 
   return (
