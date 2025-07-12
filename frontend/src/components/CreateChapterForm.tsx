@@ -48,6 +48,7 @@ const CreateChapterForm = ({
     }
 
     const formData = new FormData();
+    let resData = null;
     formData.append("file", file);
     fetch("http://localhost:3000/gen", {
       method: "POST",
