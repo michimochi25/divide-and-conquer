@@ -34,16 +34,20 @@ export async function authRegister(
     name: name,
     email: email,
     createdAt: new Date(),
-    lastSeen: new Date(),
     isAdmin: isAdmin,
   };
 
-  let userId = null;
   // Add user to MongoDB
+  let userId = "";
   await usersCollection.insertOne(user).then((result) => {
-    userId = result.insertedId;
+    userId = result.insertedId.toString();
   });
-  return userId;
+
+  if (!userId) {
+    throw new Error("USER_CREATION_FAILED");
+  }
+
+  return { userId: userId };
 }
 
 export async function getUser(userId: string) {
@@ -56,6 +60,20 @@ export async function getUser(userId: string) {
   }
 
   return { user: user };
+}
+
+export async function checkEmailExists(email: string) {
+  const user = await usersCollection.findOne({
+    email: email,
+  });
+
+  console.log("Checking email:", email, "Found user:", user);
+
+  if (!user || user === undefined) {
+    return { exists: false };
+  }
+
+  return { exists: true };
 }
 
 export async function addCourse(
@@ -79,7 +97,6 @@ export async function addCourse(
     title: title,
     description: description,
     createdAt: new Date(),
-    lastSeen: new Date(),
     userId: userId,
     courseId: courseId,
     chapters: [],
@@ -94,7 +111,7 @@ export async function addChapter(
   title: string,
   questions: Question[]
 ) {
-  const scenes = await generateStoryScenes(title, questions.length);
+  const scenes = await generateStoryScenes(title, 5, questions.length);
 
   if (!scenes || scenes.length === 0) {
     throw new Error("Scene generation failed, cannot create chapter.");
@@ -114,12 +131,46 @@ export async function addChapter(
     courseId: courseId,
     title: title,
     createdAt: new Date(),
-    lastSeen: new Date(),
     question: questions,
     storyData: finalStoryData,
   };
 
   console.log("[Backend] Chapter object created successfully.");
-  // await chaptersCollection.insertOne(chapter);
+
+  const result = await chaptersCollection.insertOne(chapter);
+
+  // Keep the ID as an ObjectId, DON'T use .toString()
+  const chapterId = result.insertedId;
+
+  // Find the course to update
+  const filter = { courseId: courseId }; // Usually you filter by the course's _id
+
+  // Prepare the update operation. This is now pushing an ObjectId.
+  const update = {
+    $push: { chapters: chapterId }
+  };
+
+  // Execute the atomic update
+  await coursesCollection.findOneAndUpdate(filter, update);
   return chapter;
+}
+
+export async function getAllCourses(
+  userId: string
+) {
+  const courses = await coursesCollection.find({
+    userId: userId,
+  }).toArray();
+
+  return { courses: courses };
+}
+
+export async function getAllChapter(
+  courseId: string
+) {
+  const chapter = await chaptersCollection.find({
+    courseId: courseId,
+  }).toArray();
+
+  return { chapters: chapter };
 }

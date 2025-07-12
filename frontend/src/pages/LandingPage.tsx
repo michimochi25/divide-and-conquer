@@ -10,7 +10,7 @@ const LandingPage = () => {
         <h1>Welcome to</h1>
         <h1 className="font-bold">Divide and Conquer</h1>
       </header>
-      <Button text="START" onClick={() => navigate("/login")} />
+      <Button text="START" onClick={() => navigate("/signin")} />
     </div>
   );
 };

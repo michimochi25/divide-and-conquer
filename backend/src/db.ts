@@ -25,6 +25,7 @@ export async function connectDb() {
     // Initialize collections
     usersCollection = db.collection("users");
     coursesCollection = db.collection("courses");
+    chaptersCollection = db.collection("chapters");
 
     // Initialize collections if they don't exist
     const usersCount = await usersCollection.countDocuments();

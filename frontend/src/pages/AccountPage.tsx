@@ -1,8 +1,12 @@
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import RoleBar from "../components/RoleBar";
 
 const AdminPage = () => {
+  const navigate = useNavigate();
+  const userId = useParams().userId;
+
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen text-xl gap-2">
       <div className="flex gap-5 justify-between w-[90%] max-w-full px-10">
@@ -15,7 +19,7 @@ const AdminPage = () => {
                 <Button
                   text="My classes"
                   className="w-full text-2xl"
-                  onClick={() => {}}
+                  onClick={() => navigate(`/user/${userId}/classes`)}
                 />
                 <Button
                   text="Change profile"

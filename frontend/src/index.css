@@ -31,6 +31,15 @@ h1 {
   --tw-bg-opacity: 0.5;
 }
 
+.class-description {
+  display: -webkit-box;
+  max-width: 200px;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: black;
@@ -157,4 +166,16 @@ h1 {
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
   background-color: #303030;
   opacity: 8%;
+}
+
+.container {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.container::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
 }
