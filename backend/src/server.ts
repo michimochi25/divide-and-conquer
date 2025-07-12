@@ -6,7 +6,10 @@ import pdf from "pdf-parse";
 import * as authService from "./auth";
 import { closeDb, connectDb } from "./db";
 import { generateQuestions } from "./question";
-import { genSpeech } from "./audio";
+import { generateWavAudio } from "./audio";
+import { promises as fs } from 'fs';
+import os from 'os';
+import path from 'path';
 
 const app = express();
 const port = 3000;
@@ -172,17 +175,57 @@ const startServer = async () => {
   }
 };
 
-app.post("/generate-speech", async (req: Request, res: Response) => {
+// audio usage
+// curl -X POST http://localhost:3000/gen-speech \
+// -H "Content-Type: application/json" \
+// -d '{"text": "Joe: Hows it going today Jane?"}' \
+// -o output.wav
+
+app.post("/gen-speech", async (req: Request, res: Response) => {
+  const tempFilePath = path.join(os.tmpdir(), `temp_audio_${Date.now()}.wav`);
+
   try {
     const { text } = req.body;
     if (!text) {
-      return res.status(400).json({ error: "Request body must contain 'text'." });
+      return res.status(400).json({
+        success: false,
+        error: "Request body must contain 'text'."
+      });
     }
 
-    const audioBase64 = await genSpeech(text);
-    res.json({ audioContent: audioBase64 });
+    const wavBuffer = await generateWavAudio(text);
+    console.log(`[Server] Generated WAV buffer of size: ${wavBuffer.length} bytes.`);
+
+    if (!wavBuffer || wavBuffer.length === 0) {
+      throw new Error("Generated WAV buffer is empty or invalid.");
+    }
+
+    await fs.writeFile(tempFilePath, wavBuffer);
+    console.log(`[Server] Temporarily saved WAV file to: ${tempFilePath}`);
+
+    res.sendFile(tempFilePath, (err) => {
+      if (err) {
+        console.error("[Server] Error sending file:", err);
+      } else {
+        console.log("[Server] Successfully sent file to client.");
+      }
+
+      fs.unlink(tempFilePath).catch(unlinkErr => {
+        console.error("[Server] Error deleting temporary file:", unlinkErr);
+      });
+    });
+
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    console.error("[Server] An error occurred during the speech generation pipeline:", err.message);
+
+    fs.access(tempFilePath).then(() => fs.unlink(tempFilePath)).catch(() => { });
+    if (!res.headersSent) {
+      res.status(500).json({
+        success: false,
+        error: "Failed to generate audio.",
+        details: err.message
+      });
+    }
   }
 });
 
