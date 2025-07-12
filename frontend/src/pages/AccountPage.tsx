@@ -31,6 +31,7 @@ const AccountPage = () => {
         data: userData,
       });
       console.log("User data updated:", resp.data);
+      setAvatarEditMode(!avatarEditMode);
     } catch (error) {
       console.error("Failed to update user data:", error);
     }
@@ -120,7 +121,7 @@ const AccountPage = () => {
               type="button"
               onClick={() => updateUser()}
               className={twMerge(
-                "text-2xl",
+                "text-xl",
                 avatarEditMode ? "visible" : "invisible"
               )}
               icon={<span className="material-symbols-sharp">save</span>}
