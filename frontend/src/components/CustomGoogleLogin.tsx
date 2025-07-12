@@ -2,7 +2,6 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { GoogleButton } from "./GoogleButton";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
-import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const CustomGoogleLogin = () => {
@@ -27,11 +26,9 @@ const CustomGoogleLogin = () => {
 
         if (resp.data.exists) {
           console.log("User exists, navigating to user page");
-          navigate(`/user/${resp.data.user._id}`);
-
-          localStorage.setItem("token", tokenResponse.access_token);
-
           setUserData(resp.data.user);
+          localStorage.setItem("token", tokenResponse.access_token);
+          navigate(`/user/${resp.data.user._id}`);
         } else {
           navigate("/register", {
             state: {

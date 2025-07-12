@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type AuthContextType = {
   userData: User | undefined;
   setUserData: React.Dispatch<React.SetStateAction<User | undefined>>;
   logout: () => void;
+  isLoading: boolean;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -28,32 +30,38 @@ export const AuthProvider = ({
   userId: string | undefined;
 }) => {
   const [userData, setUserData] = useState<User | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("token");
     setUserData(undefined);
-  };
-
-  const fetchUserData = async (userId: string) => {
-    try {
-      const response = await axios.get(`http://localhost:3000/user/${userId}`);
-      setUserData(response.data.user);
-      console.log("User data fetched:", response.data.user);
-    } catch (error) {
-      console.error("Failed to fetch user data:", error);
-      setUserData(undefined);
-    }
+    // redirect to login page or home page
+    navigate("/");
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/user/${userId}`
+        );
+        setUserData(response.data.user);
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+        setUserData(undefined);
+      }
+      setIsLoading(false);
+      console.log("Done loading");
+    };
+
     if (userId && !userData) {
-      // Fetch user data if userId is present and userData is not set
-      fetchUserData(userId);
+      fetchData();
     }
-  }, []);
+  }, [userId]);
 
   return (
-    <AuthContext.Provider value={{ userData, setUserData, logout }}>
+    <AuthContext.Provider value={{ userData, setUserData, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

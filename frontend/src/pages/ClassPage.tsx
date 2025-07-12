@@ -35,7 +35,6 @@ const ClassPage = () => {
     fetchChapters();
   }, []);
 
-
   const nextPage = (chapter: Chapter) => {
     if (userData?.isAdmin) return;
     setChapterData(chapter);
@@ -47,7 +46,9 @@ const ClassPage = () => {
   return (
     <div className="flex flex-col items-center gap-4 justify-between h-full w-full">
       <div className="flex items-center text-3xl font-bold mb-4 gap-4 justify-between w-full">
-        <Button text="+" onClick={() => setViewForm(!viewForm)} />
+        {userData?.isAdmin && (
+          <Button text="+" onClick={() => setViewForm(!viewForm)} />
+        )}
         <p className="text-xl">{classId}</p>
         <p>{data.title}</p>
       </div>

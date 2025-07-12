@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import RoleBar from "../components/RoleBar";
@@ -9,13 +9,14 @@ import axios from "axios";
 
 const AccountPage = () => {
   const navigate = useNavigate();
-  const userId = useParams().userId;
-  const { userData, setUserData } = useAuth();
+  const { userData, setUserData, logout } = useAuth();
   const [avatarEditMode, setAvatarEditMode] = useState(false);
 
   const getUser = async () => {
     try {
-      const user = await axios.get(`http://localhost:3000/user/${userId}`);
+      const user = await axios.get(
+        `http://localhost:3000/user/${userData?._id}`
+      );
       if (!user || !user.data) {
         throw new Error("User data not found");
       }
@@ -27,9 +28,12 @@ const AccountPage = () => {
 
   const updateUser = async () => {
     try {
-      const resp = await axios.put(`http://localhost:3000/user/${userId}`, {
-        data: userData,
-      });
+      const resp = await axios.put(
+        `http://localhost:3000/user/${userData?._id}`,
+        {
+          data: userData,
+        }
+      );
       console.log("User data updated:", resp.data);
       setAvatarEditMode(!avatarEditMode);
     } catch (error) {
@@ -38,7 +42,11 @@ const AccountPage = () => {
   };
 
   useEffect(() => {
-    getUser();
+    if (userData) {
+      getUser();
+    } else {
+      console.log("Failed fetching..");
+    }
   }, []);
 
   return (
@@ -53,7 +61,7 @@ const AccountPage = () => {
                 <Button
                   text="My classes"
                   className="w-full text-2xl"
-                  onClick={() => navigate(`/user/${userId}/classes`)}
+                  onClick={() => navigate(`/user/${userData?._id}/classes`)}
                 />
                 <Button
                   text="Change profile"
@@ -64,6 +72,14 @@ const AccountPage = () => {
                   text="Settings"
                   className="w-full text-2xl"
                   onClick={() => {}}
+                />
+                <Button
+                  text=""
+                  className="text-2xl p-2"
+                  icon={
+                    <span className="material-symbols-sharp">exit_to_app</span>
+                  }
+                  onClick={() => logout()}
                 />
               </div>
             </div>
