@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "npx ts-node src/server.ts",
-    "dev": "nodemon --exec npx ts-node src/index.ts",
+    "dev": "nodemon --exec npx ts-node src/server.ts",
     "build": "tsc"
   },
   "dependencies": {
