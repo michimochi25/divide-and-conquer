@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage";
 import GooglePage from "./pages/GooglePage";
 import QuestionPage from "./pages/QuestionPage";
 import DialoguePage from "./pages/DialoguePage";
+import AuthWrapper from "./AuthWrapper";
 
 function App() {
   return (
@@ -19,7 +20,14 @@ function App() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/question" element={<QuestionPage />} />
       <Route path="/dialogue" element={<DialoguePage />} />
-      <Route path="/user/:userId" element={<AccountLayout />}>
+      <Route
+        path="/user/:userId"
+        element={
+          <AuthWrapper>
+            <AccountLayout />
+          </AuthWrapper>
+        }
+      >
         <Route index element={<AccountPage />} />
         <Route path="classes" element={<ClassLayout />}>
           <Route index element={<ClassesPage />} />
