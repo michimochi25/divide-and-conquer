@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type AuthContextType = {
   userData: User | undefined;
@@ -28,10 +29,13 @@ export const AuthProvider = ({
   userId: string | undefined;
 }) => {
   const [userData, setUserData] = useState<User | undefined>();
+  const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("token");
     setUserData(undefined);
+    // redirect to login page or home page
+    navigate("/");
   };
 
   const fetchUserData = async (userId: string) => {

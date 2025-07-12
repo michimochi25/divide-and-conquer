@@ -10,7 +10,7 @@ import axios from "axios";
 const AccountPage = () => {
   const navigate = useNavigate();
   const userId = useParams().userId;
-  const { userData, setUserData } = useAuth();
+  const { userData, setUserData, logout } = useAuth();
   const [avatarEditMode, setAvatarEditMode] = useState(false);
 
   const getUser = async () => {
@@ -64,6 +64,14 @@ const AccountPage = () => {
                   text="Settings"
                   className="w-full text-2xl"
                   onClick={() => {}}
+                />
+                <Button
+                  text=""
+                  className="text-2xl p-2"
+                  icon={
+                    <span className="material-symbols-sharp">exit_to_app</span>
+                  }
+                  onClick={() => logout()}
                 />
               </div>
             </div>
