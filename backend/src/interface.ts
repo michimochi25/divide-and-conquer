@@ -1,31 +1,30 @@
 export interface Datastore {
-    users: Array<User>;
-    quizzes: Array<Quiz>;
+  users: Array<User>;
+  quizzes: Array<Quiz>;
 }
 
 export interface User {
-    userId: number;
-    name: string;
-    email: string;
-    password: string;
+  userId: number;
+  name: string;
+  email: string;
 }
 
 export interface Quiz {
-    quizId: number;
-    name: string;
-    ownerId: number;
-    description: string;
-    questions: Array<Question>;
+  quizId: number;
+  name: string;
+  ownerId: number;
+  description: string;
+  questions: Array<Question>;
 }
 
 export interface Question {
-    questionId: number;
-    problem: string;
-    options: Array<Answer>;
+  questionId: number;
+  problem: string;
+  options: Array<Answer>;
 }
 
 export interface Answer {
-    answerId: number;
-    answer: string;
-    correct: boolean;
+  answerId: number;
+  answer: string;
+  correct: boolean;
 }

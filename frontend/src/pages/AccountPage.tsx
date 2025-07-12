@@ -2,10 +2,44 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import RoleBar from "../components/RoleBar";
+import sprite from "../assets/characters.png";
+import { useEffect, useState } from "react";
+
+type User = {
+  name: string;
+  email: string;
+  isAdmin: boolean;
+  createdAt: Date;
+  lastSeen: Date; // what ???
+};
 
 const AdminPage = () => {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState<User>({
+    name: "",
+    email: "",
+    isAdmin: false,
+    createdAt: new Date(),
+    lastSeen: new Date(),
+  });
   const userId = useParams().userId;
+
+  const getUser = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/user/${userId}`);
+      if (!response.ok) {
+        throw new Error("NETWORK_ERROR");
+      }
+      const userData = await response.json();
+      setUserData(userData.user);
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen text-xl gap-2">
@@ -14,7 +48,7 @@ const AdminPage = () => {
           className="p-8"
           children={
             <div className="flex flex-col items-center justify-center gap-5">
-              <p className="font-bold text-2xl">John Smith</p>
+              <p className="font-bold text-2xl">{userData.name}</p>
               <div className="flex flex-col items-center justify-center gap-2">
                 <Button
                   text="My classes"
@@ -36,8 +70,15 @@ const AdminPage = () => {
           }
         />
         <div className="flex flex-col gap-5 flex-1">
-          <RoleBar role="Student" points={100} />
-          <img alt="character sprite" className="justify-self-center" />
+          <RoleBar
+            role={`${userData.isAdmin ? "Admin" : "Student"}`}
+            points={100}
+          />
+          <img
+            src={sprite}
+            alt="character sprite"
+            className="justify-self-center"
+          />
         </div>
       </div>
     </div>
