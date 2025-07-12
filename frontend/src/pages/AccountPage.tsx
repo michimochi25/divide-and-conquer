@@ -64,7 +64,7 @@ const AccountPage = () => {
           />
           <div className="flex items-center gap-2">
             <span
-              className="material-symbols-sharp cursor-pointer"
+              className="material-symbols-sharp cursor-pointer select-none"
               style={{
                 fontSize: "54px",
                 visibility: avatarEditMode ? "visible" : "hidden",
@@ -73,7 +73,7 @@ const AccountPage = () => {
                 if (userData) {
                   setUserData({
                     ...userData,
-                    avatar: (userData.avatar - 1) % 8,
+                    avatar: (userData.avatar - 1 + 8) % 8,
                   });
                 }
               }}
@@ -86,7 +86,7 @@ const AccountPage = () => {
               />
             </div>
             <span
-              className="material-symbols-sharp cursor-pointer"
+              className="material-symbols-sharp cursor-pointer select-none"
               style={{
                 fontSize: "54px",
                 visibility: avatarEditMode ? "visible" : "hidden",
