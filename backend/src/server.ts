@@ -6,6 +6,7 @@ import pdf from "pdf-parse";
 import * as authService from "./auth";
 import { closeDb, connectDb } from "./db";
 import { generateQuestions } from "./question";
+import { genSpeech } from "./audio";
 
 const app = express();
 const port = 3000;
@@ -158,6 +159,20 @@ const startServer = async () => {
     process.exit(1);
   }
 };
+
+app.post("/generate-speech", async (req: Request, res: Response) => {
+  try {
+    const { text } = req.body;
+    if (!text) {
+      return res.status(400).json({ error: "Request body must contain 'text'." });
+    }
+
+    const audioBase64 = await genSpeech(text);
+    res.json({ audioContent: audioBase64 });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 process.on("SIGINT", async () => {
   console.log("Shutting down server.");
