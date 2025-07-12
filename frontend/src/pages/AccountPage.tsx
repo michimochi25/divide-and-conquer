@@ -31,7 +31,7 @@ const AccountPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen text-xl gap-2">
-      <div className="flex gap-5 justify-between w-[90%] max-w-full px-10">
+      <div className="flex gap-5 justify-between w-[90%] max-w-full px-10 z-0">
         <Container
           className="p-8"
           children={

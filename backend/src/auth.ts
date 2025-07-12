@@ -2,7 +2,6 @@ import { usersCollection, coursesCollection, chaptersCollection } from "./db";
 import {
   Chapter,
   Question,
-  generateCharacterImage,
   generateStoryScenes,
   integrateChallengesIntoStory,
 } from "./storyGenerator";
@@ -116,15 +115,6 @@ export async function addChapter(
     throw new Error("Scene generation failed, cannot create chapter.");
   }
 
-  for (const scene of scenes) {
-    if (scene.character) {
-      const imageUrl = await generateCharacterImage(scene.character);
-      if (imageUrl) {
-        scene.characterImageUrl = imageUrl;
-      }
-    }
-  }
-
   const finalStoryData = integrateChallengesIntoStory(scenes, questions);
   const chapter: Chapter = {
     courseId: courseId,
@@ -141,16 +131,16 @@ export async function addChapter(
   // Keep the ID as an ObjectId, DON'T use .toString()
   const chapterId = result.insertedId;
 
-  // Find the course to update
-  const filter = { courseId: courseId }; // Usually you filter by the course's _id
+  // // Find the course to update
+  // const filter = { courseId: courseId }; // Usually you filter by the course's _id
 
   // Prepare the update operation. This is now pushing an ObjectId.
   const update = {
     $put: { chapters: chapterId },
   };
 
-  // Execute the atomic update
-  await coursesCollection.findOneAndUpdate(filter, update);
+  // // Execute the atomic update
+  // await coursesCollection.findOneAndUpdate(filter, update);
   return chapter;
 }
 
@@ -177,7 +167,6 @@ export async function getAllChapter(courseId: string) {
       courseId: courseId,
     })
     .toArray();
-  console.log("Chapter fetched:", chapter);
   return { chapters: chapter };
 }
 
@@ -206,4 +195,15 @@ export async function enrollClass(userId: string, courseId: string) {
   }
 
   return { success: true };
+}
+
+export async function getChapter(chapterId: string) {
+  const chapter = await chaptersCollection.findOne({ _id: new ObjectId(chapterId) });
+
+  console.log("Backend", chapter);
+  if (!chapter || chapter === undefined) {
+    throw new Error(`ID ${chapterId} USER_DOES_NOT_EXIST`);
+  }
+
+  return { chapter: chapter };
 }

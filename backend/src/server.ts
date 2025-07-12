@@ -67,7 +67,6 @@ app.get(
   "/course/:courseId/chapters/",
   async function getChaptersByCourse(req: Request, res: Response) {
     try {
-      // FIX: Changed req.params.userId to req.params.courseId
       const courseId = req.params.courseId;
       const chapters = await authService.getAllChapter(courseId);
       res.json(chapters);
@@ -86,6 +85,19 @@ app.post("/add-course", async function addCourse(req: Request, res: Response) {
     res.status(400).json({ error: err.message });
   }
 });
+
+app.get(
+  "/chapter/:chapterId",
+  async function getChapterById(req: Request, res: Response) {
+    try {
+      const courseId = req.params.chapterId;
+      const chapter = await authService.getChapter(courseId);
+      res.json(chapter);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+);
 
 app.post(
   "/course/add-chapter/:courseId",
