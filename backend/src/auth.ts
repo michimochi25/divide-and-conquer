@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+
 import { usersCollection, coursesCollection, chaptersCollection } from "./db";
 import {
   Chapter,
@@ -7,6 +8,8 @@ import {
   generateStoryScenes,
   integrateChallengesIntoStory,
 } from "./storyGenerator";
+import { ObjectId } from "mongodb";
+
 
 function isValidName(name: string): string | boolean {
   if (name.length > 100) {
@@ -51,9 +54,7 @@ export async function authRegister(
 }
 
 export async function getUser(userId: string) {
-  const user = await usersCollection.findOne({
-    userId: userId,
-  });
+  const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
 
   if (!user || user === undefined) {
     throw new Error("USER_DOES_NOT_EXIST");
@@ -70,10 +71,10 @@ export async function checkEmailExists(email: string) {
   console.log("Checking email:", email, "Found user:", user);
 
   if (!user || user === undefined) {
-    return { exists: false };
+    return { exists: false, userId: null };
   }
 
-  return { exists: true };
+  return { exists: true, userId: user._id.toString() };
 }
 
 export async function addCourse(

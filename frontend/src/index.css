@@ -40,6 +40,12 @@ h1 {
   overflow: hidden;
 }
 
+.sprite {
+  background-image: url("./assets/sprite.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: black;
