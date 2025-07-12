@@ -10,7 +10,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export type User = {
-  userId: string;
+  _id: string;
   name: string;
   email: string;
   isAdmin: boolean;

@@ -67,10 +67,10 @@ export async function checkEmailExists(email: string) {
   });
 
   if (!user || user === undefined) {
-    return { exists: false, userId: null };
+    return { exists: false, user: user };
   }
 
-  return { exists: true, userId: user._id.toString() };
+  return { exists: true, user: user };
 }
 
 export async function addCourse(
@@ -145,13 +145,20 @@ export async function addChapter(
 }
 
 export async function getAllCourses(userId: string) {
-  const courses = await coursesCollection
-    .find({
-      userId: userId,
-    })
+  const user = await usersCollection.findOne({
+    _id: new ObjectId(userId),
+  });
+
+  if (!user || user === undefined) {
+    throw new Error("USER_DOES_NOT_EXIST");
+  }
+
+  const courseIds = user.courses || [];
+  const courseData = await coursesCollection
+    .find({ _id: { $in: courseIds.map((id: string) => new ObjectId(id)) } })
     .toArray();
 
-  return { courses: courses };
+  return { courses: courseData || [] };
 }
 
 export async function getAllChapter(courseId: string) {

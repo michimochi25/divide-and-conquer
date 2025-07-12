@@ -5,11 +5,13 @@ const Button = ({
   type,
   onClick,
   className = "",
+  icon,
 }: {
   text: string;
   type?: "button" | "submit" | "reset";
   onClick: () => void;
   className?: string;
+  icon?: React.ReactNode;
 }) => {
   return (
     <button
@@ -20,7 +22,10 @@ const Button = ({
         className
       )}
     >
-      {text}
+      <span className="flex items-center gap-2">
+        <span>{text}</span>
+        {icon && <span className="material-symbols-sharp">{icon}</span>}
+      </span>
     </button>
   );
 };

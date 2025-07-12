@@ -27,7 +27,7 @@ const CreateClassForm = ({
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/add-course", {
-        userId: userData?.userId,
+        userId: userData?._id,
         title,
         description,
       });

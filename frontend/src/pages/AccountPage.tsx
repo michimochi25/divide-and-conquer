@@ -3,7 +3,7 @@ import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import RoleBar from "../components/RoleBar";
 import { useEffect, useState } from "react";
-import { useAuth, type User } from "../AuthContext";
+import { useAuth } from "../AuthContext";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
 
@@ -11,6 +11,7 @@ const AccountPage = () => {
   const navigate = useNavigate();
   const userId = useParams().userId;
   const { userData, setUserData } = useAuth();
+  const [avatarEditMode, setAvatarEditMode] = useState(false);
 
   const getUser = async () => {
     try {
@@ -45,7 +46,7 @@ const AccountPage = () => {
                 <Button
                   text="Change profile"
                   className="w-full text-2xl"
-                  onClick={() => {}}
+                  onClick={() => setAvatarEditMode(!avatarEditMode)}
                 />
                 <Button
                   text="Settings"
@@ -56,14 +57,64 @@ const AccountPage = () => {
             </div>
           }
         />
-        <div className="flex flex-col gap-5 flex-1">
+        <div className="flex flex-col gap-5 flex-1 items-center">
           <RoleBar
             role={`${userData?.isAdmin ? "Admin" : "Student"}`}
             points={100}
           />
-          <img
-            className={twMerge("sprite ", `sprite-${userData?.avatar || 5}`)}
-          />
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center gap-2">
+              <span
+                className="material-symbols-sharp cursor-pointer select-none"
+                style={{
+                  fontSize: "54px",
+                  visibility: avatarEditMode ? "visible" : "hidden",
+                }}
+                onClick={() => {
+                  if (userData) {
+                    setUserData({
+                      ...userData,
+                      avatar: (userData.avatar - 1 + 8) % 8,
+                    });
+                  }
+                }}
+              >
+                arrow_left
+              </span>
+              <div className="w-15%">
+                <img
+                  className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
+                />
+              </div>
+              <span
+                className="material-symbols-sharp cursor-pointer select-none"
+                style={{
+                  fontSize: "54px",
+                  visibility: avatarEditMode ? "visible" : "hidden",
+                }}
+                onClick={() => {
+                  if (userData) {
+                    setUserData({
+                      ...userData,
+                      avatar: (userData.avatar + 1) % 8,
+                    });
+                  }
+                }}
+              >
+                arrow_right
+              </span>
+            </div>
+            <Button
+              text="Save"
+              type="button"
+              onClick={() => {}}
+              className={twMerge(
+                "text-2xl",
+                avatarEditMode ? "visible" : "invisible"
+              )}
+              icon={<span className="material-symbols-sharp">save</span>}
+            />
+          </div>
         </div>
       </div>
     </div>
