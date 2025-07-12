@@ -13,7 +13,7 @@ function isValidName(name: String): string | boolean {
   return true;
 }
 
-export async function AuthRegister(
+export async function authRegister(
   email: string,
   name: string,
   isAdmin: boolean
