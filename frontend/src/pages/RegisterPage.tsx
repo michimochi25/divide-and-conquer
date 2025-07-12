@@ -12,7 +12,7 @@ const RegisterPage = () => {
 
   const location = useLocation();
   const { email } = location.state;
-  const { setUserId, setIsAdmin } = useAuth();
+
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -26,8 +26,6 @@ const RegisterPage = () => {
       console.log("Registration successful", resp.data);
 
       navigate(`/user/${resp.data.userId}`);
-      setIsAdmin(resp.data.isAdmin);
-      setUserId(resp.data.userId);
     } catch (error) {
       console.error("Registration failed:", error);
     }

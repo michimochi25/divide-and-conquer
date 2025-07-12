@@ -16,7 +16,7 @@ type ClassData = {
 const ClassPage = () => {
   const [data, setData] = useState<ClassData[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const { userId, isAdmin } = useAuth();
+  const { userData } = useAuth();
 
   const navigate = useNavigate();
   const url = window.location.pathname;
@@ -25,7 +25,7 @@ const ClassPage = () => {
     // Fetch the classes for the user
     try {
       const response = await axios.get(
-        `http://localhost:3000/user/${userId}/courses`
+        `http://localhost:3000/user/${userData?.userId}/courses`
       );
 
       if (response.data && Array.isArray(response.data.courses)) {
@@ -52,7 +52,7 @@ const ClassPage = () => {
         <CreateClassForm
           setShowForm={setShowForm}
           updateData={updateData}
-          isAdmin={isAdmin}
+          isAdmin={userData?.isAdmin || false}
         />
       ) : (
         <div className="container flex flex-1 gap-4 overflow-auto w-140 flex-col sm:flex-row">

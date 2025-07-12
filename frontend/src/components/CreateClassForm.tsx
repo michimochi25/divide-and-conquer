@@ -21,18 +21,16 @@ const CreateClassForm = ({
 }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const { userId } = useAuth();
+  const { userData } = useAuth();
 
   const handleCreateClass = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/add-course", {
-        userId: userId,
+        userId: userData?.userId,
         title,
         description,
       });
-
-      console.log(userId, title, description);
 
       if (!response.data) {
         throw new Error("Failed to create class");

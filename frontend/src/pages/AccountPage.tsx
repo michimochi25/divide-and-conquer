@@ -2,40 +2,23 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import RoleBar from "../components/RoleBar";
-import sprite from "../assets/characters.png";
 import { useEffect, useState } from "react";
-import { useAuth } from "../AuthContext";
+import { useAuth, type User } from "../AuthContext";
+import { twMerge } from "tailwind-merge";
+import axios from "axios";
 
-type User = {
-  name: string;
-  email: string;
-  isAdmin: boolean;
-  createdAt: Date;
-  lastSeen: Date; // what ???
-};
-
-const AdminPage = () => {
+const AccountPage = () => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState<User>({
-    name: "",
-    email: "",
-    isAdmin: false,
-    createdAt: new Date(),
-    lastSeen: new Date(),
-  });
   const userId = useParams().userId;
-  const { setUserId, setIsAdmin } = useAuth();
+  const { userData, setUserData } = useAuth();
 
   const getUser = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/user/${userId}`);
-      if (!response.ok) {
-        throw new Error("NETWORK_ERROR");
+      const user = await axios.get(`http://localhost:3000/user/${userId}`);
+      if (!user || !user.data) {
+        throw new Error("User data not found");
       }
-      const userData = await response.json();
-      setUserData(userData.user);
-      setUserId(userData.user._id);
-      setIsAdmin(userData.user.isAdmin);
+      setUserData(user.data.user);
     } catch (error) {
       console.error("Failed to fetch user data:", error);
     }
@@ -52,7 +35,7 @@ const AdminPage = () => {
           className="p-8"
           children={
             <div className="flex flex-col items-center justify-center gap-5">
-              <p className="font-bold text-2xl">{userData.name}</p>
+              <p className="font-bold text-2xl">{userData?.name}</p>
               <div className="flex flex-col items-center justify-center gap-2">
                 <Button
                   text="My classes"
@@ -75,13 +58,11 @@ const AdminPage = () => {
         />
         <div className="flex flex-col gap-5 flex-1">
           <RoleBar
-            role={`${userData.isAdmin ? "Admin" : "Student"}`}
+            role={`${userData?.isAdmin ? "Admin" : "Student"}`}
             points={100}
           />
           <img
-            src={sprite}
-            alt="character sprite"
-            className="justify-self-center"
+            className={twMerge("sprite ", `sprite-${userData?.avatar || 5}`)}
           />
         </div>
       </div>
@@ -89,4 +70,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default AccountPage;

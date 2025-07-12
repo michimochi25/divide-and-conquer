@@ -32,6 +32,7 @@ export async function authRegister(
   // Create user
   const user = {
     name: name,
+    avatar: 5,
     email: email,
     createdAt: new Date(),
     isAdmin: isAdmin,

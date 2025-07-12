@@ -1,22 +1,28 @@
 import React, { createContext, useContext, useState } from "react";
 
 type AuthContextType = {
-  userId: string | null;
-  setUserId: React.Dispatch<React.SetStateAction<string | null>>;
-  isAdmin: boolean;
-  setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>;
+  userData: User | undefined;
+  setUserData: React.Dispatch<React.SetStateAction<User | undefined>>;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
 );
 
+export type User = {
+  userId: string;
+  name: string;
+  email: string;
+  isAdmin: boolean;
+  createdAt: Date;
+  avatar: number;
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [userId, setUserId] = useState<string | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [userData, setUserData] = useState<User | undefined>();
 
   return (
-    <AuthContext.Provider value={{ userId, setUserId, isAdmin, setIsAdmin }}>
+    <AuthContext.Provider value={{ userData, setUserData }}>
       {children}
     </AuthContext.Provider>
   );
