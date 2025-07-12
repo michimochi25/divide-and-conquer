@@ -58,6 +58,54 @@ const startServer = async () => {
         }
       }
     );
+
+    app.get(
+      "/user/:userId/courses/",
+      async function getCoursesByUserId(req: Request, res: Response) {
+        try {
+          const userId = req.params.userId;
+          const courses = await authService.getAllCourses(userId);
+          res.json(courses);
+        } catch (err: any) {
+          res.status(400).json({ error: err.message });
+        }
+      }
+    );
+
+    app.get(
+      "/course/:courseId/chapters/",
+      async function getChaptersByCourse(req: Request, res: Response) {
+        try {
+          const courseId = req.params.userId;
+          const chapters = await authService.getAllChapter(courseId);
+          res.json(chapters);
+        } catch (err: any) {
+          res.status(400).json({ error: err.message });
+        }
+      }
+    );
+
+    app.post(
+      "/course/add-chapter/:courseId",
+      async function addChapter(req: Request, res: Response) {
+        try {
+          const { title } = req.body;
+          const courseId = req.params.courseId;
+
+          const questions = [
+            {
+              questionText: "aa",
+              options: ["a", "b"],
+              correctAnswer: "a",
+            },
+          ];
+          const auth = await authService.addChapter(courseId, title, questions);
+          res.json(auth);
+        } catch (err: any) {
+          res.status(400).json({ error: err.message });
+        }
+      }
+    );
   } catch (error) {
     console.error("Error starting server:", error);
     process.exit(1);
