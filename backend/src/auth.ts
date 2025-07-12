@@ -104,7 +104,6 @@ export async function addCourse(
   return userId;
 }
 
-/*
 export async function addChapter(
   courseId: string,
   title: string,
@@ -153,7 +152,6 @@ export async function addChapter(
   await coursesCollection.findOneAndUpdate(filter, update);
   return chapter;
 }
-*/
 
 export async function getAllCourses(userId: string) {
   const courses = await coursesCollection

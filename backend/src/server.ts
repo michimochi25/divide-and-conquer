@@ -10,44 +10,21 @@ import { generateQuestions } from "./question";
 const app = express();
 const port = 3000;
 
-const startServer = async () => {
+app.use(cors());
+app.use(express.json());
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.post("/register", async function register(req: Request, res: Response) {
   try {
-    await connectDb();
-
-    app.listen(port, () => {
-      console.log(`Listening on port ${port}`);
-    });
-
-    app.use(express.json());
-    app.use(cors());
-
-    const upload = multer({ dest: "./public/data/uploads/" });
-    app.post("/upload", upload.single("file"), function (req, res) {
-      console.log(req.file, req.body);
-    });
-
-    app.post("/register", async function register(req: Request, res: Response) {
-      try {
-        const { email, name, isAdmin } = req.body;
-        const auth = await authService.authRegister(email, name, isAdmin);
-        res.json(auth);
-      } catch (err: any) {
-        res.status(400).json({ error: err.message });
-      }
-    });
-
-    app.post(
-      "/add-course",
-      async function addCourse(req: Request, res: Response) {
-        try {
-          const { userId, title, description } = req.body;
-          const resp = await authService.addCourse(userId, title, description);
-          res.json(resp);
-        } catch (err: any) {
-          res.status(400).json({ error: err.message });
-        }
-      }
-    );
+    const { email, name, isAdmin } = req.body;
+    const auth = await authService.authRegister(email, name, isAdmin);
+    res.json(auth);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 app.get("/user/:userId", async function getUser(req: Request, res: Response) {
   try {
@@ -59,57 +36,69 @@ app.get("/user/:userId", async function getUser(req: Request, res: Response) {
   }
 });
 
-app.get("/user/email/:email", async function getUserByEmail(req: Request, res: Response) {
-  try {
-    const email = req.params.email;
-    const exists = await authService.checkEmailExists(email);
-    res.json(exists);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
+app.get(
+  "/user/email/:email",
+  async function getUserByEmail(req: Request, res: Response) {
+    try {
+      const email = req.params.email;
+      const exists = await authService.checkEmailExists(email);
+      res.json(exists);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
   }
-});
+);
 
-app.get("/user/:userId/courses/", async function getCoursesByUserId(req: Request, res: Response) {
-  try {
-    const userId = req.params.userId;
-    const courses = await authService.getAllCourses(userId);
-    res.json(courses);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
+app.get(
+  "/user/:userId/courses/",
+  async function getCoursesByUserId(req: Request, res: Response) {
+    try {
+      const userId = req.params.userId;
+      const courses = await authService.getAllCourses(userId);
+      res.json(courses);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
   }
-});
+);
 
-app.get("/course/:courseId/chapters/", async function getChaptersByCourse(req: Request, res: Response) {
-  try {
-    // FIX: Changed req.params.userId to req.params.courseId
-    const courseId = req.params.courseId;
-    const chapters = await authService.getAllChapter(courseId);
-    res.json(chapters);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
+app.get(
+  "/course/:courseId/chapters/",
+  async function getChaptersByCourse(req: Request, res: Response) {
+    try {
+      // FIX: Changed req.params.userId to req.params.courseId
+      const courseId = req.params.courseId;
+      const chapters = await authService.getAllChapter(courseId);
+      res.json(chapters);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
   }
-});
+);
 
-app.post("/course/add-chapter/:courseId", async function addChapter(req: Request, res: Response) {
-  try {
-    const { title } = req.body;
-    const courseId = req.params.courseId;
-    const questions = [
-      {
-        questionText: "aa",
-        options: ["a", "b"],
-        correctAnswer: "a",
-      },
-    ];
-    const auth = await authService.addChapter(courseId, title, questions);
-    res.json(auth);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
+app.post(
+  "/course/add-chapter/:courseId",
+  async function addChapter(req: Request, res: Response) {
+    try {
+      const { title } = req.body;
+      const courseId = req.params.courseId;
+      const questions = [
+        {
+          questionText: "aa",
+          options: ["a", "b"],
+          correctAnswer: "a",
+        },
+      ];
+      const auth = await authService.addChapter(courseId, title, questions);
+      res.json(auth);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
   }
-});
+);
 
 // POST /gen
-app.post("/gen", upload.single('file'), async (req: Request, res: Response) => {
+app.post("/gen", upload.single("file"), async (req: Request, res: Response) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded." });
@@ -119,7 +108,7 @@ app.post("/gen", upload.single('file'), async (req: Request, res: Response) => {
       const pdfData = await pdf(req.file.buffer);
       textData = pdfData.text;
     } else if (req.file.mimetype === "text/plain") {
-      textData = req.file.buffer.toString('utf8');
+      textData = req.file.buffer.toString("utf8");
     } else {
       return res.status(400).json({ error: "Unsupported file type." });
     }
@@ -133,6 +122,20 @@ app.post("/gen", upload.single('file'), async (req: Request, res: Response) => {
     res.status(500).json({ error: `Failed to process file: ${err.message}` });
   }
 });
+
+app.put(
+  "/user/:userId/courses",
+  async function enrollClass(req: Request, res: Response) {
+    try {
+      const userId = req.params.userId;
+      const { courseId } = req.body;
+      const resp = await authService.enrollClass(userId, courseId);
+      res.json(resp);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+);
 
 const startServer = async () => {
   try {
