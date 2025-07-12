@@ -4,14 +4,13 @@ import { Input } from "../components/Input";
 import { BackButton } from "../components/BackButton";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../AuthContext";
 
 const RegisterPage = () => {
   const [role, setRole] = useState("");
   const [name, setName] = useState("");
 
   const location = useLocation();
-  const { email } = location.state;
+  const { email, token } = location.state;
 
   const navigate = useNavigate();
 
@@ -24,7 +23,7 @@ const RegisterPage = () => {
         email: email,
       });
       console.log("Registration successful", resp.data);
-
+      localStorage.setItem("token", token);
       navigate(`/user/${resp.data.userId}`);
     } catch (error) {
       console.error("Registration failed:", error);

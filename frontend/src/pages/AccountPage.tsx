@@ -30,6 +30,7 @@ const AccountPage = () => {
       const resp = await axios.put(`http://localhost:3000/user/${userId}`, {
         data: userData,
       });
+      console.log("User data updated:", resp.data);
     } catch (error) {
       console.error("Failed to update user data:", error);
     }

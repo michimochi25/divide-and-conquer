@@ -11,18 +11,28 @@ import GooglePage from "./pages/GooglePage";
 import QuestionPage from "./pages/QuestionPage";
 import DialoguePage from "./pages/DialoguePage";
 import AuthWrapper from "./AuthWrapper";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/signin" element={<GooglePage />} />
+      <Route
+        path="/signin"
+        element={
+          <AuthWrapper>
+            <GooglePage />
+          </AuthWrapper>
+        }
+      />
       <Route path="/register" element={<RegisterPage />} />
       <Route
         path="/question"
         element={
           <AuthWrapper>
-            <QuestionPage />
+            <ProtectedRoute>
+              <QuestionPage />
+            </ProtectedRoute>
           </AuthWrapper>
         }
       />
@@ -30,7 +40,9 @@ function App() {
         path="/dialogue"
         element={
           <AuthWrapper>
-            <DialoguePage />
+            <ProtectedRoute>
+              <DialoguePage />
+            </ProtectedRoute>
           </AuthWrapper>
         }
       />
@@ -38,7 +50,9 @@ function App() {
         path="/user/:userId"
         element={
           <AuthWrapper>
-            <AccountLayout />
+            <ProtectedRoute>
+              <AccountLayout />
+            </ProtectedRoute>
           </AuthWrapper>
         }
       >

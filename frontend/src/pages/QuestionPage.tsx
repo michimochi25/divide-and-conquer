@@ -17,9 +17,7 @@ const QuestionPage = () => {
   }
 
   if (!chapterData || chapterData === undefined) {
-    return (
-      <ErrorContainer/>
-    );
+    return <ErrorContainer />;
   }
 
   const dataStory = chapterData.storyData;

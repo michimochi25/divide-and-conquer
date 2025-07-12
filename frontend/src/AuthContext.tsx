@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 type AuthContextType = {
   userData: User | undefined;
   setUserData: React.Dispatch<React.SetStateAction<User | undefined>>;
+  logout: () => void;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -28,6 +29,11 @@ export const AuthProvider = ({
 }) => {
   const [userData, setUserData] = useState<User | undefined>();
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUserData(undefined);
+  };
+
   const fetchUserData = async (userId: string) => {
     try {
       const response = await axios.get(`http://localhost:3000/user/${userId}`);
@@ -47,7 +53,7 @@ export const AuthProvider = ({
   }, []);
 
   return (
-    <AuthContext.Provider value={{ userData, setUserData }}>
+    <AuthContext.Provider value={{ userData, setUserData, logout }}>
       {children}
     </AuthContext.Provider>
   );
