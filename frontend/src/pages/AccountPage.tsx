@@ -25,6 +25,16 @@ const AccountPage = () => {
     }
   };
 
+  const updateUser = async () => {
+    try {
+      const resp = await axios.put(`http://localhost:3000/user/${userId}`, {
+        data: userData,
+      });
+    } catch (error) {
+      console.error("Failed to update user data:", error);
+    }
+  };
+
   useEffect(() => {
     getUser();
   }, []);
@@ -107,7 +117,7 @@ const AccountPage = () => {
             <Button
               text="Save"
               type="button"
-              onClick={() => {}}
+              onClick={() => updateUser()}
               className={twMerge(
                 "text-2xl",
                 avatarEditMode ? "visible" : "invisible"

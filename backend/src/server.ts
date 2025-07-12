@@ -148,6 +148,17 @@ app.put(
   }
 );
 
+app.put("/user/:userId", async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+    const { data } = req.body;
+    const updatedData = await authService.updateUser(userId, data);
+    res.json(updatedData);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 const startServer = async () => {
   try {
     await connectDb();
@@ -164,7 +175,9 @@ app.post("/generate-speech", async (req: Request, res: Response) => {
   try {
     const { text } = req.body;
     if (!text) {
-      return res.status(400).json({ error: "Request body must contain 'text'." });
+      return res
+        .status(400)
+        .json({ error: "Request body must contain 'text'." });
     }
 
     const audioBase64 = await genSpeech(text);

@@ -181,6 +181,32 @@ export async function getAllChapter(courseId: string) {
   return { chapters: chapter };
 }
 
+export async function updateUser(userId: string, data: any) {
+  const user = await usersCollection.findOne({
+    _id: new ObjectId(userId),
+  });
+
+  if (!user || user === undefined) {
+    throw new Error("USER_DOES_NOT_EXIST");
+  }
+
+  const updateData: any = {};
+  if (data.name) {
+    updateData.name = data.name;
+  }
+  if (data.avatar) {
+    updateData.avatar = data.avatar;
+  }
+
+  const result = await usersCollection.findOneAndUpdate(
+    { _id: new ObjectId(userId) },
+    { $set: updateData },
+    { returnDocument: "after" }
+  );
+
+  return { user: result };
+}
+
 export async function enrollClass(userId: string, courseId: string) {
   const user = await usersCollection.findOne({
     _id: new ObjectId(userId),
