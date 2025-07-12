@@ -62,46 +62,58 @@ const AccountPage = () => {
             role={`${userData?.isAdmin ? "Admin" : "Student"}`}
             points={100}
           />
-          <div className="flex items-center gap-2">
-            <span
-              className="material-symbols-sharp cursor-pointer select-none"
-              style={{
-                fontSize: "54px",
-                visibility: avatarEditMode ? "visible" : "hidden",
-              }}
-              onClick={() => {
-                if (userData) {
-                  setUserData({
-                    ...userData,
-                    avatar: (userData.avatar - 1 + 8) % 8,
-                  });
-                }
-              }}
-            >
-              arrow_left
-            </span>
-            <div className="w-15%">
-              <img
-                className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
-              />
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center gap-2">
+              <span
+                className="material-symbols-sharp cursor-pointer select-none"
+                style={{
+                  fontSize: "54px",
+                  visibility: avatarEditMode ? "visible" : "hidden",
+                }}
+                onClick={() => {
+                  if (userData) {
+                    setUserData({
+                      ...userData,
+                      avatar: (userData.avatar - 1 + 8) % 8,
+                    });
+                  }
+                }}
+              >
+                arrow_left
+              </span>
+              <div className="w-15%">
+                <img
+                  className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
+                />
+              </div>
+              <span
+                className="material-symbols-sharp cursor-pointer select-none"
+                style={{
+                  fontSize: "54px",
+                  visibility: avatarEditMode ? "visible" : "hidden",
+                }}
+                onClick={() => {
+                  if (userData) {
+                    setUserData({
+                      ...userData,
+                      avatar: (userData.avatar + 1) % 8,
+                    });
+                  }
+                }}
+              >
+                arrow_right
+              </span>
             </div>
-            <span
-              className="material-symbols-sharp cursor-pointer select-none"
-              style={{
-                fontSize: "54px",
-                visibility: avatarEditMode ? "visible" : "hidden",
-              }}
-              onClick={() => {
-                if (userData) {
-                  setUserData({
-                    ...userData,
-                    avatar: (userData.avatar + 1) % 8,
-                  });
-                }
-              }}
-            >
-              arrow_right
-            </span>
+            <Button
+              text="Save"
+              type="button"
+              onClick={() => {}}
+              className={twMerge(
+                "text-2xl",
+                avatarEditMode ? "visible" : "invisible"
+              )}
+              icon={<span className="material-symbols-sharp">save</span>}
+            />
           </div>
         </div>
       </div>
