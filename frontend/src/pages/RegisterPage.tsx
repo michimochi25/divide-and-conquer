@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
-import { GoogleButton } from "../components/GoogleButton";
 import { BackButton } from "../components/BackButton";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [role, setRole] = useState("");
   const [name, setName] = useState("");
 
@@ -39,10 +38,9 @@ const LoginPage = () => {
           <h1>My name is</h1>
           <Input name="name" placeholder="Name" value={name} setter={setName} />
         </div>
-        <GoogleButton />
       </form>
     </div>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
