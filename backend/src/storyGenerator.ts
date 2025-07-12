@@ -1,16 +1,10 @@
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey:
-    "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",
-});
-
 export interface Scene {
   characterImageUrl: string;
   type: "scene";
   background: string;
   character: string | null;
   text: string;
+  challange: string;
 }
 
 export interface Question {
@@ -45,12 +39,11 @@ export async function generateStoryScenes(
   const userPrompt = `Generate a short story about "${topic}". 
     Break the story down into exactly ${count} continuous scenes, included ${questionNum} challanges scenes existed, and 
     the story should be ended in the last scene. For each scene, 
-    provide a descriptive background, a detailed character description 
-    (e.g., "A wise old wizard with a long white beard and starry robes"),
+    provide a descriptive background, a villain character from my enum (monster, valak, or not at all (so the villain shud not necesserally appear in each scene)),
     and the scene text. If no character is present, the character should be 
-    null. For each scene, if the scene trigger a challange event provide the information about 
-    that (e.g. the event trigger a battle in the next scene, then it should tell the this scene trigger a challange).
-    The story should be in second person Point of View (You) (reader as the main character).
+    null. If the scene trigger a challange event (could be anything that require big action) provide the information about 
+    that in field challange (e.g. the event trigger a battle in the next scene, then it should tell the this scene trigger a challange).
+    The story should be in second person Point of View (You) (reader as the main character). Limit the scene into 3-5 sentences each.
     Ensure the output is a valid JSON array.`;
 
   const payload = {
@@ -74,6 +67,7 @@ export async function generateStoryScenes(
               type: "STRING",
               description:
                 "A detailed description of the character in the scene, or null.",
+              enum: ["monster", "valak", "null"],
             },
             text: {
               type: "STRING",
@@ -87,7 +81,7 @@ export async function generateStoryScenes(
     },
   };
 
-  const apiKey = "AIzaSyCkill1F5-Qkr06Gt1v_oiNumZC_JYrxaI";
+  const apiKey = process.env.GOOGLE_KEY_API;
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
   try {
@@ -133,7 +127,7 @@ export function integrateChallengesIntoStory(
   const sceneCount = storyData.length;
   for (let i = 0; i < sceneCount; i++) {
     fullStory.push(storyData[i]);
-    if (questions[i]) {
+    if (questions[i] && storyData[i].challange == "true") {
       const question = questions[i];
       const challenge: Challenge = {
         type: "challenge",
@@ -145,38 +139,4 @@ export function integrateChallengesIntoStory(
     }
   }
   return fullStory;
-}
-
-export async function generateCharacterImage(
-  characterDescription: string
-): Promise<string | null> {
-  const prompt = `Portrait of a character: ${characterDescription}. Fantasy art pixel style, detailed, high quality.`;
-
-  try {
-    const res = await fetch('https://api.deepai.org/api/text2img', {
-      method: 'POST',
-      headers: {
-        'Api-Key': process.env.DEEPAI_API_KEY!,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: prompt }),
-    });
-
-    if (!res.ok) {
-      console.error('[DeepAI] Error:', res.status, await res.text());
-      return null;
-    }
-
-    const json = await res.json();
-    // DeepAI returns an "output_url" you can embed directly
-    if (typeof json.output_url === 'string') {
-      return json.output_url;
-    } else {
-      console.error('[DeepAI] No output_url in response:', json);
-      return null;
-    }
-  } catch (err) {
-    console.error('[DeepAI] Request failed:', err);
-    return null;
-  }
 }

@@ -1,12 +1,14 @@
 import { v4 as uuidv4 } from "uuid";
+
 import { usersCollection, coursesCollection, chaptersCollection } from "./db";
 import {
   Chapter,
   Question,
-  generateCharacterImage,
   generateStoryScenes,
   integrateChallengesIntoStory,
 } from "./storyGenerator";
+import { ObjectId } from "mongodb";
+
 import { UpdateFilter } from "mongodb";
 import { Course } from "./interface";
 
@@ -53,9 +55,7 @@ export async function authRegister(
 }
 
 export async function getUser(userId: string) {
-  const user = await usersCollection.findOne({
-    userId: userId,
-  });
+  const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
 
   if (!user || user === undefined) {
     throw new Error("USER_DOES_NOT_EXIST");
@@ -72,10 +72,10 @@ export async function checkEmailExists(email: string) {
   console.log("Checking email:", email, "Found user:", user);
 
   if (!user || user === undefined) {
-    return { exists: false };
+    return { exists: false, userId: null };
   }
 
-  return { exists: true };
+  return { exists: true, userId: user._id.toString() };
 }
 
 export async function addCourse(
@@ -117,15 +117,6 @@ export async function addChapter(
 
   if (!scenes || scenes.length === 0) {
     throw new Error("Scene generation failed, cannot create chapter.");
-  }
-
-  for (const scene of scenes) {
-    if (scene.character) {
-      const imageUrl = await generateCharacterImage(scene.character);
-      if (imageUrl) {
-        scene.characterImageUrl = imageUrl;
-      }
-    }
   }
 
   const finalStoryData = integrateChallengesIntoStory(scenes, questions);
@@ -181,7 +172,7 @@ export async function getAllChapter(courseId: string) {
 
 export async function getChapter(chapterId: string) {
   const chapter = await chaptersCollection.findOne({
-    _id: chapterId,
+    _id: new ObjectId(chapterId),
   });
 
   return { chapters: chapter };
