@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { usersCollection, coursesCollection } from "./db";
 
-function isValidName(name: String): string | boolean {
+function isValidName(name: string): string | boolean {
   if (name.length > 100) {
     return "NAME_TOO_LONG";
   }
@@ -22,21 +22,26 @@ export async function authRegister(
     throw new Error(isValidName(name) as string);
   }
 
-  const userId = uuidv4();
-
   // Create user
   const user = {
     name: name,
     email: email,
     createdAt: new Date(),
     lastSeen: new Date(),
-    userId: userId,
     isAdmin: isAdmin,
   };
 
   // Add user to MongoDB
-  await usersCollection.insertOne(user);
-  return userId;
+  let userId = "";
+  await usersCollection.insertOne(user).then((result) => {
+    userId = result.insertedId.toString();
+  });
+
+  if (!userId) {
+    throw new Error("USER_CREATION_FAILED");
+  }
+
+  return { userId: userId };
 }
 
 export async function getUser(userId: string) {
@@ -49,6 +54,20 @@ export async function getUser(userId: string) {
   }
 
   return { user: user };
+}
+
+export async function checkEmailExists(email: string) {
+  const user = await usersCollection.findOne({
+    email: email,
+  });
+
+  console.log("Checking email:", email, "Found user:", user);
+
+  if (!user || user === undefined) {
+    return { exists: false };
+  }
+
+  return { exists: true };
 }
 
 export async function addCourse(
