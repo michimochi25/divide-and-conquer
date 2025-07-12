@@ -1,31 +1,9 @@
-export interface Datastore {
-    users: Array<User>;
-    quizzes: Array<Quiz>;
-}
+import { ObjectId } from "mongodb";
 
-export interface User {
-    userId: number;
-    name: string;
-    email: string;
-    password: string;
-}
-
-export interface Quiz {
-    quizId: number;
-    name: string;
-    ownerId: number;
-    description: string;
-    questions: Array<Question>;
-}
-
-export interface Question {
-    questionId: number;
-    problem: string;
-    options: Array<Answer>;
-}
-
-export interface Answer {
-    answerId: number;
-    answer: string;
-    correct: boolean;
+export interface Course {
+    _id: ObjectId,
+    title: string,
+    description: string,
+    userId: string,
+    chapters: ObjectId[]
 }

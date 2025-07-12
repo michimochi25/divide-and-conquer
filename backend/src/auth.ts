@@ -7,6 +7,8 @@ import {
   generateStoryScenes,
   integrateChallengesIntoStory,
 } from "./storyGenerator";
+import { UpdateFilter } from "mongodb";
+import { Course } from "./interface";
 
 function isValidName(name: string): string | boolean {
   if (name.length > 100) {
@@ -142,35 +144,45 @@ export async function addChapter(
   // Keep the ID as an ObjectId, DON'T use .toString()
   const chapterId = result.insertedId;
 
-  // Find the course to update
-  const filter = { courseId: courseId }; // Usually you filter by the course's _id
+  // // Find the course to update
+  // const filter = { courseId: courseId }; // Usually you filter by the course's _id
 
-  // Prepare the update operation. This is now pushing an ObjectId.
-  const update = {
-    $push: { chapters: chapterId }
-  };
+  // // Prepare the update operation. This is now pushing an ObjectId.
+  // const update: UpdateFilter<Course> = {
+  //   $set: {
+  //     chapters: chapterId,
+  //   },
+  // };
 
-  // Execute the atomic update
-  await coursesCollection.findOneAndUpdate(filter, update);
+  // // Execute the atomic update
+  // await coursesCollection.findOneAndUpdate(filter, update);
   return chapter;
 }
 
-export async function getAllCourses(
-  userId: string
-) {
-  const courses = await coursesCollection.find({
-    userId: userId,
-  }).toArray();
+export async function getAllCourses(userId: string) {
+  const courses = await coursesCollection
+    .find({
+      userId: userId,
+    })
+    .toArray();
 
   return { courses: courses };
 }
 
-export async function getAllChapter(
-  courseId: string
-) {
-  const chapter = await chaptersCollection.find({
-    courseId: courseId,
-  }).toArray();
+export async function getAllChapter(courseId: string) {
+  const chapter = await chaptersCollection
+    .find({
+      courseId: courseId,
+    })
+    .toArray();
+
+  return { chapters: chapter };
+}
+
+export async function getChapter(chapterId: string) {
+  const chapter = await chaptersCollection.findOne({
+    _id: chapterId,
+  });
 
   return { chapters: chapter };
 }

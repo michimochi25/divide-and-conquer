@@ -1,3 +1,10 @@
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey:
+    "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",
+});
+
 export interface Scene {
   characterImageUrl: string;
   type: "scene";
@@ -6,14 +13,12 @@ export interface Scene {
   text: string;
 }
 
-// Defines the structure for a question.
 export interface Question {
   questionText: string;
   options: string[];
   correctAnswer: string;
 }
 
-// Defines the structure for a challenge, derived from a question.
 export interface Challenge {
   type: "challenge";
   challengeText: string;
@@ -21,10 +26,8 @@ export interface Challenge {
   correctAnswer: string;
 }
 
-// A union type representing any item that can be in the storyData array.
 export type StoryDataItem = Scene | Challenge;
 
-// Defines the final structure for the chapter object.
 export interface Chapter {
   courseId: string;
   title: string;
@@ -36,7 +39,7 @@ export interface Chapter {
 export async function generateStoryScenes(
   topic: string,
   count: number,
-  questionNum: number,
+  questionNum: number
 ): Promise<Scene[]> {
   console.log(`[Backend] Generating ${count} scenes for topic: "${topic}"...`);
   const userPrompt = `Generate a short story about "${topic}". 
@@ -147,40 +150,33 @@ export function integrateChallengesIntoStory(
 export async function generateCharacterImage(
   characterDescription: string
 ): Promise<string | null> {
-  console.log(`[Backend] Generating image for: "${characterDescription}"...`);
-  // Enhance the prompt for better image results
-  const imagePrompt = `Portrait of a character: ${characterDescription}. Fantasy art style, detailed, high quality.`;
-
-  const payload = {
-    instances: [{ prompt: imagePrompt }],
-    parameters: { sampleCount: 1 },
-  };
-  const apiKey = "AIzaSyCkill1F5-Qkr06Gt1v_oiNumZC_JYrxaI";
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+  const prompt = `Portrait of a character: ${characterDescription}. Fantasy art pixel style, detailed, high quality.`;
 
   try {
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+    const res = await fetch('https://api.deepai.org/api/text2img', {
+      method: 'POST',
+      headers: {
+        'Api-Key': process.env.DEEPAI_API_KEY!,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: prompt }),
     });
 
-    if (!response.ok) {
-      throw new Error(
-        `Image generation API request failed with status ${response.status}`
-      );
-    }
-
-    const result = await response.json();
-    if (result.predictions && result.predictions[0]?.bytesBase64Encoded) {
-      console.log("[Backend] Successfully received image data.");
-      return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
-    } else {
-      console.error("[Backend] Image generation returned no data:", result);
+    if (!res.ok) {
+      console.error('[DeepAI] Error:', res.status, await res.text());
       return null;
     }
-  } catch (error) {
-    console.error("[Backend] Error in generateCharacterImage:", error);
+
+    const json = await res.json();
+    // DeepAI returns an "output_url" you can embed directly
+    if (typeof json.output_url === 'string') {
+      return json.output_url;
+    } else {
+      console.error('[DeepAI] No output_url in response:', json);
+      return null;
+    }
+  } catch (err) {
+    console.error('[DeepAI] Request failed:', err);
     return null;
   }
 }
