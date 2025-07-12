@@ -15,7 +15,7 @@ const ClassPage = () => {
   const fetchChapters = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/course/${classId}/chapters/`
+        `http://localhost:3000/course/${classId}/chapters`
       );
       console.log("Fetched chapters:", response.data);
       setChapters(response.data.chapters);

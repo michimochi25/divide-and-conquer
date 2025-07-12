@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import RoleBar from "../components/RoleBar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
@@ -11,6 +11,7 @@ const AccountPage = () => {
   const navigate = useNavigate();
   const userId = useParams().userId;
   const { userData, setUserData } = useAuth();
+  const [avatarEditMode, setAvatarEditMode] = useState(false);
 
   const getUser = async () => {
     try {
@@ -45,7 +46,7 @@ const AccountPage = () => {
                 <Button
                   text="Change profile"
                   className="w-full text-2xl"
-                  onClick={() => {}}
+                  onClick={() => setAvatarEditMode(!avatarEditMode)}
                 />
                 <Button
                   text="Settings"
@@ -61,9 +62,50 @@ const AccountPage = () => {
             role={`${userData?.isAdmin ? "Admin" : "Student"}`}
             points={100}
           />
-          <img
-            className={twMerge("sprite ", `sprite-${userData?.avatar || 5}`)}
-          />
+          <div className="flex items-center gap-2">
+            <span
+              className="material-symbols-sharp cursor-pointer"
+              style={{
+                fontSize: "54px",
+                visibility: avatarEditMode ? "visible" : "hidden",
+              }}
+              onClick={() => {
+                if (userData) {
+                  setUserData({
+                    ...userData,
+                    avatar: Math.max((userData.avatar || 5) - 1, 0),
+                  });
+                }
+              }}
+            >
+              arrow_left
+            </span>
+            <div className="w-15%">
+              <img
+                className={twMerge(
+                  "sprite ",
+                  `sprite-${userData?.avatar || 5}`
+                )}
+              />
+            </div>
+            <span
+              className="material-symbols-sharp cursor-pointer"
+              style={{
+                fontSize: "54px",
+                visibility: avatarEditMode ? "visible" : "hidden",
+              }}
+              onClick={() => {
+                if (userData) {
+                  setUserData({
+                    ...userData,
+                    avatar: Math.min((userData.avatar || 5) + 1, 6),
+                  });
+                }
+              }}
+            >
+              arrow_right
+            </span>
+          </div>
         </div>
       </div>
     </div>
