@@ -18,8 +18,22 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/signin" element={<GooglePage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/question" element={<QuestionPage />} />
-      <Route path="/dialogue" element={<DialoguePage />} />
+      <Route
+        path="/question"
+        element={
+          <AuthWrapper>
+            <QuestionPage />
+          </AuthWrapper>
+        }
+      />
+      <Route
+        path="/dialogue"
+        element={
+          <AuthWrapper>
+            <DialoguePage />
+          </AuthWrapper>
+        }
+      />
       <Route
         path="/user/:userId"
         element={
