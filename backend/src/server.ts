@@ -10,8 +10,6 @@ import { generateQuestions } from "./question";
 const app = express();
 const port = 3000;
 
-// --- 2. Middleware ---
-// Middleware must be configured before routes are defined.
 app.use(cors());
 app.use(express.json());
 
