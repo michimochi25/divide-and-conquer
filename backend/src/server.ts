@@ -103,7 +103,7 @@ app.get(
 );
 
 app.post(
-  "/course/add-chapter/:courseId",
+  "/course/:courseId/add-chapter",
   async function addChapter(req: Request, res: Response) {
     try {
       const { title } = req.body;

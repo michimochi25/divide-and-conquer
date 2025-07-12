@@ -22,10 +22,14 @@ const Button = ({
         className
       )}
     >
-      <span className="flex items-center gap-2">
-        <span>{text}</span>
-        {icon && <span className="material-symbols-sharp">{icon}</span>}
-      </span>
+      {icon ? (
+        <span className="flex items-center gap-2">
+          <span>{text}</span>
+          <span className="material-symbols-sharp">{icon}</span>
+        </span>
+      ) : (
+        <>{text}</>
+      )}
     </button>
   );
 };

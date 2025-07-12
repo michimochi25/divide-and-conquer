@@ -36,7 +36,7 @@ const ClassPage = () => {
         <p>{data.title}</p>
       </div>
       {viewForm ? (
-        <CreateChapterForm />
+        <CreateChapterForm classId={classId} setViewForm={setViewForm} />
       ) : (
         <div className="container flex flex-col gap-4 overflow-auto w-140">
           {chapters.map((chapter, index) => (

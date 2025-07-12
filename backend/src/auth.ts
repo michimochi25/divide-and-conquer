@@ -131,16 +131,12 @@ export async function addChapter(
   // Keep the ID as an ObjectId, DON'T use .toString()
   const chapterId = result.insertedId;
 
-  // // Find the course to update
-  // const filter = { courseId: courseId }; // Usually you filter by the course's _id
-
-  // Prepare the update operation. This is now pushing an ObjectId.
-  const update = {
-    $put: { chapters: chapterId },
-  };
-
   // // Execute the atomic update
-  // await coursesCollection.findOneAndUpdate(filter, update);
+  await coursesCollection.findOneAndUpdate(
+    { _id: new ObjectId(courseId) },
+    { $set: { chapters: chapterId } }
+  );
+
   return chapter;
 }
 
@@ -224,7 +220,9 @@ export async function enrollClass(userId: string, courseId: string) {
 }
 
 export async function getChapter(chapterId: string) {
-  const chapter = await chaptersCollection.findOne({ _id: new ObjectId(chapterId) });
+  const chapter = await chaptersCollection.findOne({
+    _id: new ObjectId(chapterId),
+  });
 
   console.log("Backend", chapter);
   if (!chapter || chapter === undefined) {
