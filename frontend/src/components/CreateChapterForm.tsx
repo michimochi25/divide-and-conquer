@@ -9,9 +9,11 @@ import type { Question } from "../ChapterContext";
 const CreateChapterForm = ({
   classId,
   setViewForm,
+  fetchChapters,
 }: {
   classId: string;
   setViewForm: Dispatch<SetStateAction<boolean>>;
+  fetchChapters: () => Promise<void>;
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -34,6 +36,7 @@ const CreateChapterForm = ({
         textData: questions,
       });
       setViewForm(false);
+      fetchChapters();
       setFile(null);
       setTitle("");
     } catch (error) {
@@ -63,14 +66,14 @@ const CreateChapterForm = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between w-full h-full gap-2">
+    <div className="flex-1 flex flex-col w-full h-full gap-2">
       <Input
         type="string"
         placeholder="Chapter title"
         value={title}
         setter={setTitle}
       />
-      <div className="flex justify-between items-center w-full">
+      <div className="flex justify-between items-center w-full h-full">
         <Container
           children={
             <>
@@ -78,11 +81,19 @@ const CreateChapterForm = ({
                 className="w-full h-full p-1 flex flex-col justify-center items-center gap-3 cursor-pointer"
                 onClick={() => fileInputRef.current?.click()}
               >
-                <p className="w-94 text-center">
-                  Upload course notes and make AI-Generated questions
-                </p>
-                <img src={notesIcon} width={45} height={45} />
-                <p>accepts .pdf, .txt</p>
+                {file ? (
+                  <p className="w-96 text-center break-all h-full flex items-center justify-center">
+                    Uploaded {file.name}
+                  </p>
+                ) : (
+                  <>
+                    <p className="w-96 text-center">
+                      Upload course notes and make AI-Generated questions
+                    </p>
+                    <img src={notesIcon} width={45} height={45} />
+                    <p>accepts .pdf, .txt</p>
+                  </>
+                )}
                 <input
                   type="file"
                   accept=".pdf,.txt"

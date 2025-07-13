@@ -7,7 +7,7 @@ import { ErrorContainer } from "../components/ErrorContainer";
 import React, { useState, useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 
-const QuestionPage = () => {
+const DialoguePage = () => {
   const navigate = useNavigate();
   const { SceneData, setSceneData } = useScene();
   const { chapterData } = useChapter();
@@ -114,4 +114,4 @@ const QuestionPage = () => {
   );
 };
 
-export default QuestionPage;
+export default DialoguePage;

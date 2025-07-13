@@ -134,7 +134,7 @@ export async function addChapter(
   // // Execute the atomic update
   await coursesCollection.findOneAndUpdate(
     { _id: new ObjectId(courseId) },
-    { $set: { chapters: chapterId } }
+    { $addToSet: { chapters: chapterId } }
   );
 
   return chapter;

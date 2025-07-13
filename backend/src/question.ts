@@ -9,7 +9,7 @@ export async function generateQuestions(
   );
 
   const userPrompt = `
-    Generate exactly ${count} distinct multiple-choice questions from the following materials ${textData}. All questions must be sequentially, in which each question helps to answer the next question, and the last question will be the question that asking for the understanding of the full concept. So all questions basically make a story, and the final solution of the story is in the last question. The way you create the question is try to connect the materials with the relatable real life situation for students, in which the calculation is simple but more focusing on how the materials concept be implemented in their life. All questions should be made to help understand deeply the application of the materials in real life situation, with only simple calculation but relatable scenario. For each question, provide 4 options and ensure the correct answer is one of those options
+    Generate exactly ${count} distinct multiple-choice questions from the following text ${textData}. The questions should be asking about something that is important for students to remember, preparing them for the theoretical exam. For each question, provide 4 options and ensure the correct answer is one of those options.
     `;
 
   const payload = {
