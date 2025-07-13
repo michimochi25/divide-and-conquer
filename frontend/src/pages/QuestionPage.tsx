@@ -49,7 +49,7 @@ const QuestionPage = () => {
           className="px-5"
           children={
             <div className="relative flex flex-col items-center justify-center h-full gap-5">
-              <p className="font-bold text-2xl">
+              <p className="font-bold text-2xl sm:text-xl">
                 {dataStory[index].challengeText}
               </p>
 
@@ -59,17 +59,21 @@ const QuestionPage = () => {
                     <Button
                       key={i}
                       text={option}
-                      className="w-full h-full text-2xl flex-1"
+                      className="w-full h-full text-2xl sm:text-xl flex-1"
                       onClick={() => {
                         nextPage(i);
                       }}
                     />
                   ))}
               </div>
-              <div className="absolute bottom-2 left-0 flex flex-row text-center items-center">
-                <img src={monsterImg} width={100} height={100} />
-                <p className="text-center"> {monsterName} </p>
-              </div>
+              {monsterName !== "null" ? (
+                <div className="absolute bottom-2 left-0 flex flex-row text-center items-center">
+                  <img src={monsterImg} width={100} height={100} />
+                  <p className="text-center"> {monsterName} </p>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           }
         />
