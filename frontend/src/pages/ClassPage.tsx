@@ -39,7 +39,7 @@ const ClassPage = () => {
     if (userData?.isAdmin) return;
     setChapterData(chapter);
     setSceneData(0);
-    navigate(`/dialogue`);
+    navigate(`/${classId}/chapter/${chapter._id}/dialogue`);
   };
 
   console.log(chapters);

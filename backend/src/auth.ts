@@ -116,7 +116,7 @@ export async function addChapter(
   }
 
   const finalStoryData = integrateChallengesIntoStory(scenes, questions);
-  const chapter: Chapter = {
+  const chapter = {
     courseId: courseId,
     title: title,
     createdAt: new Date(),
