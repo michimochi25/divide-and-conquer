@@ -33,7 +33,7 @@ const DialoguePage = () => {
 
   useEffect(() => {
     if (dataStory?.text) {
-      let i = 0;
+      let i = -1;
       setDisplayText("");
       setIsAnimating(true);
 
@@ -99,7 +99,7 @@ const DialoguePage = () => {
             >
               <div className="flex flex-row text-center items-center">
                 <div className="w-15%">
-                  <img
+                  <div
                     className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
                   />
                 </div>
