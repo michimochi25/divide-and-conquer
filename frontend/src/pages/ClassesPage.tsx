@@ -61,7 +61,7 @@ const ClassPage = () => {
               key={item._id}
               title={item.title}
               description={item.description}
-              chapters={item.chapters?.length ?? 0}
+              chapters={item.chapters.length}
               onClick={() =>
                 navigate(`${url}/${item._id}`, { state: { data: data[index] } })
               }
