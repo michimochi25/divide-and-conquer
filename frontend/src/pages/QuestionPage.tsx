@@ -7,7 +7,7 @@ import { ErrorContainer } from "../components/ErrorContainer";
 
 const QuestionPage = () => {
   const navigate = useNavigate();
-  const { chapterData, setChapterData } = useChapter();
+  const { chapterData } = useChapter();
   const { SceneData, setSceneData } = useScene();
   const chapterId = useParams().chapterId;
   const classId = useParams().classId;
@@ -25,7 +25,6 @@ const QuestionPage = () => {
   const dataStory = chapterData.storyData;
   const monsterName = dataStory[index - 1].character;
   const monsterImg = getImageUrl(monsterName);
-  console.log(monsterImg, monsterName);
 
   const nextPage = (opt_index: number) => {
     if (
