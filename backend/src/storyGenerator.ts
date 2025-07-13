@@ -28,6 +28,7 @@ export interface Chapter {
   createdAt: Date;
   question: Question[];
   storyData: StoryDataItem[];
+  _id: string;
 }
 
 export async function generateStoryScenes(
@@ -41,7 +42,7 @@ export async function generateStoryScenes(
       count + questionNum
     } continuous scenes, included ${questionNum} challanges scenes existed, and 
     the story should be ended in the last scene. For each scene, 
-    provide a descriptive background, a villain character from my enum (monster-lizard, valak, lavacorn, goblin, dragon, or not at all (so the villain shud not necesserally appear in each scene)),
+    provide a descriptive background, a villain character from my enum (lizardeo, valakarza, lavacorn, goblin, dragopion, or not at all (so the villain shud not necesserally appear in each scene)),
     and the scene text. If no character is present, the character should be 
     null. If the scene trigger a challange event (could be anything that require big action like battle with the villain) provide the information about 
     that in field challange (e.g. the event trigger a battle in the next scene, then it should tell the this scene trigger a challange), tell the main character that they need to solve the challange in the next scene to kill the monster.
@@ -70,11 +71,11 @@ export async function generateStoryScenes(
               description:
                 "A detailed description of the character in the scene, or null.",
               enum: [
-                "monster-lizard",
-                "valak",
-                "dark-unicorn-lavacorn",
+                "lizardeo",
+                "valakarza",
+                "lavacorn",
                 "goblin",
-                "dragon",
+                "dragopion",
                 "null",
               ],
             },

@@ -49,7 +49,7 @@ function App() {
         }
       />
       <Route
-        path="/question"
+        path="/:classId/chapter/:classId/question"
         element={
           <AuthWrapper>
             {/* <ProtectedRoute> */}
@@ -59,7 +59,7 @@ function App() {
         }
       />
       <Route
-        path="/dialogue"
+        path="/:classId/chapter/:classId/dialogue"
         element={
           <AuthWrapper>
             {/* <ProtectedRoute> */}
