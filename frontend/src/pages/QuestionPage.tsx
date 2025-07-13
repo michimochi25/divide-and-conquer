@@ -9,6 +9,8 @@ const QuestionPage = () => {
   const navigate = useNavigate();
   const { chapterData, setChapterData } = useChapter();
   const { SceneData, setSceneData } = useScene();
+  const chapterId = useParams().chapterId;
+  const classId = useParams().classId;
 
   const index = SceneData;
   function getImageUrl(name: string | undefined) {
@@ -21,20 +23,22 @@ const QuestionPage = () => {
   }
 
   const dataStory = chapterData.storyData;
-  const monsterName = dataStory[index].character;
+  const monsterName = dataStory[index - 1].character;
   const monsterImg = getImageUrl(monsterName);
   console.log(monsterImg, monsterName);
 
   const nextPage = (opt_index: number) => {
     if (
-      dataStory[index].options[opt_index].includes(dataStory[index].correctAnswer)
+      dataStory[index].options[opt_index].includes(
+        dataStory[index].correctAnswer
+      )
     ) {
       setSceneData(index + 1);
     } else {
       setSceneData(index - 1);
     }
 
-    navigate(`/dialogue`);
+    navigate(`/${classId}/chapter/${chapterId}/dialogue`);
   };
 
   return (
