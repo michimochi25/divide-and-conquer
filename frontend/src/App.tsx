@@ -14,78 +14,84 @@ import AuthWrapper from "./AuthWrapper";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import ErrorPage from "./pages/ErrorPage";
 import UnauthenticatedPage from "./pages/UnauthenticatedPage";
+import { useState } from "react";
+import { ErrorContainer } from "./components/ErrorContainer";
 
 function App() {
+  const [error, setError] = useState<string>("");
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <AuthWrapper>
-            {/* <UnauthenticatedPage> */}
-            <LandingPage />
-            {/* </UnauthenticatedPage> */}
-          </AuthWrapper>
-        }
-      />
-      <Route
-        path="/signin"
-        element={
-          <AuthWrapper>
-            {/* <UnauthenticatedPage> */}
-            <GooglePage />
-            {/* </UnauthenticatedPage> */}
-          </AuthWrapper>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <AuthWrapper>
-            {/* <UnauthenticatedPage> */}
-            <RegisterPage />
-            {/* </UnauthenticatedPage> */}
-          </AuthWrapper>
-        }
-      />
-      <Route
-        path="/:classId/chapter/:chapterId/question"
-        element={
-          <AuthWrapper>
-            {/* <ProtectedRoute> */}
-            <QuestionPage />
-            {/* </ProtectedRoute> */}
-          </AuthWrapper>
-        }
-      />
-      <Route
-        path="/:classId/chapter/:chapterId/dialogue"
-        element={
-          <AuthWrapper>
-            {/* <ProtectedRoute> */}
-            <DialoguePage />
-            {/* </ProtectedRoute> */}
-          </AuthWrapper>
-        }
-      />
-      <Route
-        path="/user/:userId"
-        element={
-          <AuthWrapper>
-            {/* <ProtectedRoute> */}
-            <AccountLayout />
-            {/* </ProtectedRoute> */}
-          </AuthWrapper>
-        }
-      >
-        <Route index element={<AccountPage />} />
-        <Route path="classes" element={<ClassLayout />}>
-          <Route index element={<ClassesPage />} />
-          <Route path=":classId" element={<ClassPage />} />
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <AuthWrapper>
+              {/* <UnauthenticatedPage> */}
+              <LandingPage />
+              {/* </UnauthenticatedPage> */}
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/signin"
+          element={
+            <AuthWrapper>
+              {/* <UnauthenticatedPage> */}
+              <GooglePage />
+              {/* </UnauthenticatedPage> */}
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <AuthWrapper>
+              {/* <UnauthenticatedPage> */}
+              <RegisterPage />
+              {/* </UnauthenticatedPage> */}
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/:classId/chapter/:chapterId/question"
+          element={
+            <AuthWrapper>
+              {/* <ProtectedRoute> */}
+              <QuestionPage />
+              {/* </ProtectedRoute> */}
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/:classId/chapter/:chapterId/dialogue"
+          element={
+            <AuthWrapper>
+              {/* <ProtectedRoute> */}
+              <DialoguePage />
+              {/* </ProtectedRoute> */}
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/user/:userId"
+          element={
+            <AuthWrapper>
+              {/* <ProtectedRoute> */}
+              <AccountLayout />
+              {/* </ProtectedRoute> */}
+            </AuthWrapper>
+          }
+        >
+          <Route index element={<AccountPage />} />
+          <Route path="classes" element={<ClassLayout />}>
+            <Route index element={<ClassesPage />} />
+            <Route path=":classId" element={<ClassPage />} />
+          </Route>
         </Route>
-      </Route>
-      <Route path="*" element={<ErrorPage />} />
-    </Routes>
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+      {error.length !== 0 && <ErrorContainer message={error} />}
+    </>
   );
 }
 

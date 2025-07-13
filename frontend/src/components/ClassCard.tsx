@@ -11,7 +11,7 @@ const ClassCard = ({
 }) => {
   return (
     <div
-      className="p-4 w-[30%] border-3 rounded-lg cursor-pointer hover:bg-gray-100 flex flex-col items-center justify-start"
+      className="p-4 w-full border-3 rounded-lg cursor-pointer hover:bg-gray-100 flex flex-col items-center justify-start"
       onClick={onClick}
     >
       <h2 className="text-xl font-bold">{title}</h2>

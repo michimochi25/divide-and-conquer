@@ -69,11 +69,6 @@ const AccountPage = () => {
                   onClick={() => setAvatarEditMode(!avatarEditMode)}
                 />
                 <Button
-                  text="Settings"
-                  className="w-full text-2xl"
-                  onClick={() => {}}
-                />
-                <Button
                   text=""
                   className="text-2xl p-2"
                   icon={
@@ -86,10 +81,7 @@ const AccountPage = () => {
           }
         />
         <div className="flex flex-col gap-5 flex-1 items-center">
-          <RoleBar
-            role={`${userData?.isAdmin ? "Admin" : "Student"}`}
-            points={100}
-          />
+          <RoleBar role={`${userData?.isAdmin ? "Admin" : "Student"}`} />
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-2">
               <span
@@ -110,7 +102,7 @@ const AccountPage = () => {
                 arrow_left
               </span>
               <div className="w-15%">
-                <img
+                <div
                   className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
                 />
               </div>

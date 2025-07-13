@@ -43,7 +43,7 @@ h1 {
 .sprite {
   background-image: url("./assets/characters.png");
   background-repeat: no-repeat;
-  background-position: 0 0; /* example for sprite index 2 */
+  background-position: 0 0;
   width: 100px;
   height: 250px;
   background-size: auto 250px;

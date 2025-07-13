@@ -21,7 +21,7 @@ const DialoguePage = () => {
   }
 
   if (!chapterData || chapterData === undefined) {
-    return <ErrorContainer />;
+    return <ErrorContainer message="PAGE NOT FOUND" />;
   }
 
   const dataStory = chapterData?.storyData[index];

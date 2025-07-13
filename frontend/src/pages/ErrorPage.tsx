@@ -5,7 +5,7 @@ const ErrorPage = () => {
   return (
     <div>
       <BackButton />
-      <ErrorContainer />
+      <ErrorContainer message="PAGE NOT FOUND" />
     </div>
   );
 };

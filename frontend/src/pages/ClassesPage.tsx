@@ -55,7 +55,7 @@ const ClassPage = () => {
           isAdmin={userData?.isAdmin || false}
         />
       ) : (
-        <div className="container flex flex-1 gap-4 overflow-auto w-140 flex-col sm:flex-row">
+        <div className="container grid grid-cols-3 flex-1 gap-4 overflow-auto w-140 sm:flex-row">
           {data.map((item, index) => (
             <ClassCard
               key={item._id}
