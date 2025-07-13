@@ -4,6 +4,7 @@ import { useChapter } from "../ChapterContext";
 import { useAuth } from "../AuthContext";
 import { useScene } from "../SceneContext";
 import { ErrorContainer } from "../components/ErrorContainer";
+import React, { useState, useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 const DialoguePage = () => {
@@ -11,6 +12,10 @@ const DialoguePage = () => {
   const { SceneData, setSceneData } = useScene();
   const { chapterData } = useChapter();
   const { userData } = useAuth();
+
+  const [displayText, setDisplayText] = useState("");
+  const [isAnimating, setIsAnimating] = useState(false);
+  const timerIdRef = useRef(null);
 
   const chapterId = useParams().chapterId;
   const classId = useParams().classId;
@@ -25,9 +30,33 @@ const DialoguePage = () => {
   }
 
   const dataStory = chapterData?.storyData[index];
-  // 2. Use the function in your component
 
-  const monsterName = dataStory.character as string; // This can be dynamic (e.g., from state)
+  useEffect(() => {
+    if (dataStory?.text) {
+      let i = 0;
+      setDisplayText("");
+      setIsAnimating(true);
+
+      const type = () => {
+        if (i < dataStory.text.length) {
+          setDisplayText((prev) => prev + dataStory.text.charAt(i));
+          i++;
+
+          timerIdRef.current = setTimeout(type, 50);
+        } else {
+          setIsAnimating(false);
+          timerIdRef.current = null;
+        }
+      };
+      type();
+
+      return () => {
+        clearTimeout(timerIdRef.current);
+      };
+    }
+  }, [dataStory?.text]);
+
+  const monsterName = dataStory.character as string;
   const monsterImg = getImageUrl(monsterName);
   const nextPage = () => {
     setSceneData(index + 1);
@@ -38,20 +67,29 @@ const DialoguePage = () => {
     }
   };
 
-  console.log("BJIR", dataStory, monsterName, monsterImg);
+  const handleContainerClick = () => {
+    if (isAnimating) {
+      clearTimeout(timerIdRef.current);
+      setIsAnimating(false);
+      setDisplayText(dataStory.text);
+    } else {
+      nextPage();
+    }
+  };
+
   return (
     <div className="flex flex-col relative items-center justify-center h-screen w-screen text-xl gap-2">
       {monsterName !== "null" && (
         <img src={monsterImg} className="absolute h-[80%]" />
       )}
-      <div className="flex p-8 max-w-full h-full">
+      <div className="flex p-8 w-screen h-full">
         <Container
-          className="px-5 absolute bottom-0 left-0 m-5 p-5"
+          className="px-5 absolute bottom-0 left-5 m-5 p-5 w-11/12 items-start justify-start"
           children={
             <div
               className="relative flex flex-col items-center justify-center h-full gap-5"
               onClick={() => {
-                nextPage();
+                handleContainerClick();
               }}
             >
               <div className="flex flex-row text-center items-center">
@@ -65,7 +103,7 @@ const DialoguePage = () => {
                     {" "}
                     {userData?.name}{" "}
                   </p>
-                  <p className="font-bold text-xl">{dataStory.text}</p>
+                  <p className="font-bold text-xl">{displayText}</p>
                 </div>
               </div>
             </div>

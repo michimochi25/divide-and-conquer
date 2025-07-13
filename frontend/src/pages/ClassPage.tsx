@@ -36,7 +36,6 @@ const ClassPage = () => {
   }, []);
 
   const nextPage = (chapter: Chapter) => {
-    if (userData?.isAdmin) return;
     setChapterData(chapter);
     setSceneData(0);
     navigate(`/${classId}/chapter/${chapter._id}/dialogue`);
