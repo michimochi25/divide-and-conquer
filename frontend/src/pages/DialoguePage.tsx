@@ -59,6 +59,11 @@ const DialoguePage = () => {
   const monsterName = dataStory.character as string;
   const monsterImg = getImageUrl(monsterName);
   const nextPage = () => {
+    if (index + 1 === dataStory.length) {
+      setSceneData(0);
+      navigate(`/user/${userData?._id}/classes/${classId}/`);
+    }
+
     setSceneData(index + 1);
     if (dataStory.challange === "true") {
       navigate(`/${classId}/chapter/${chapterId}/question`);
