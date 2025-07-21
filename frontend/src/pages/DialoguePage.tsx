@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Container } from "../components/Container";
-import { useChapter } from "../ChapterContext";
+import { useChapter, type StoryDataItem } from "../ChapterContext";
 import { useAuth } from "../AuthContext";
 import { useScene } from "../SceneContext";
 import { ErrorContainer } from "../components/ErrorContainer";
@@ -15,13 +15,15 @@ const DialoguePage = () => {
 
   const [displayText, setDisplayText] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
-  const timerIdRef = useRef(null);
+  const timerIdRef = useRef<NodeJS.Timeout | null>(null);
+  const [monsterName, setMonsterName] = useState<string | null>(null);
+  const [monsterImg, setMonsterImg] = useState<string | undefined>(undefined);
 
   const chapterId = useParams().chapterId;
   const classId = useParams().classId;
   const index = SceneData;
-  function getImageUrl(name: string | undefined) {
-    if (name === undefined) return;
+  function getImageUrl(name: string | undefined | null) {
+    if (!name) return;
     return new URL(`../assets/${name}.png`, import.meta.url).href;
   }
 
@@ -29,10 +31,13 @@ const DialoguePage = () => {
     return <ErrorContainer message="PAGE NOT FOUND" />;
   }
 
-  const dataStory = chapterData?.storyData[index];
+  const dataStory: StoryDataItem = chapterData?.storyData[index];
 
   useEffect(() => {
-    if (dataStory?.text) {
+    if (dataStory.type === "scene" && dataStory?.text) {
+      setMonsterName(dataStory.character);
+      setMonsterImg(getImageUrl(monsterName));
+
       let i = -1;
       setDisplayText("");
       setIsAnimating(true);
@@ -51,13 +56,13 @@ const DialoguePage = () => {
       type();
 
       return () => {
-        clearTimeout(timerIdRef.current);
+        if (timerIdRef.current) {
+          clearTimeout(timerIdRef.current);
+        }
       };
     }
-  }, [dataStory?.text]);
+  }, [dataStory]);
 
-  const monsterName = dataStory.character as string;
-  const monsterImg = getImageUrl(monsterName);
   const nextPage = () => {
     console.log(SceneData, index, chapterData);
     if (index + 1 >= chapterData?.storyData.length) {
@@ -67,7 +72,7 @@ const DialoguePage = () => {
     }
 
     setSceneData(index + 1);
-    if (dataStory.challange === "true") {
+    if (dataStory.type === "scene" && dataStory.challenge === "true") {
       navigate(`/${classId}/chapter/${chapterId}/question`);
     } else {
       navigate(`/${classId}/chapter/${chapterId}/dialogue`);
@@ -76,9 +81,11 @@ const DialoguePage = () => {
 
   const handleContainerClick = () => {
     if (isAnimating) {
-      clearTimeout(timerIdRef.current);
+      if (timerIdRef.current) {
+        clearTimeout(timerIdRef.current);
+      }
       setIsAnimating(false);
-      setDisplayText(dataStory.text);
+      setDisplayText(dataStory.type === "scene" ? dataStory.text : "");
     } else {
       nextPage();
     }

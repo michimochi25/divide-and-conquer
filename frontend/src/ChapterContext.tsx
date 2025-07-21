@@ -6,7 +6,7 @@ export interface Scene {
   background: string;
   character: string | null;
   text: string;
-  challange: string;
+  challenge: string;
 }
 
 export interface Question {
@@ -41,7 +41,11 @@ export const ChapterContext = createContext<ChapterContextType | undefined>(
   undefined
 );
 
-export const ChapterProvider = ({ children }: { children: React.ReactNode }) => {
+export const ChapterProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [chapterData, setChapterData] = useState<Chapter | undefined>();
 
   return (
