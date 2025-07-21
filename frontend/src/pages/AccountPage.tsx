@@ -101,7 +101,7 @@ const AccountPage = () => {
               >
                 arrow_left
               </span>
-              <div className="w-15%">
+              <div className="min-w-[100px]">
                 <div
                   className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
                 />

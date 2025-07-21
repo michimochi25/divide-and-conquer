@@ -62,8 +62,8 @@ const DialoguePage = () => {
     console.log(SceneData, index, chapterData);
     if (index + 1 >= chapterData?.storyData.length) {
       setSceneData(0);
-      console.log("I RUN");
       navigate(`/user/${userData?._id}/classes/${classId}/`);
+      return;
     }
 
     setSceneData(index + 1);
