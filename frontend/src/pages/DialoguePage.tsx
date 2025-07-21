@@ -6,6 +6,7 @@ import { useScene } from "../SceneContext";
 import { ErrorContainer } from "../components/ErrorContainer";
 import React, { useState, useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
+import { Typewriter } from "../components/Typewriter";
 
 const DialoguePage = () => {
   const navigate = useNavigate();
@@ -13,17 +14,18 @@ const DialoguePage = () => {
   const { chapterData } = useChapter();
   const { userData } = useAuth();
 
-  const [displayText, setDisplayText] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
+
   const timerIdRef = useRef<NodeJS.Timeout | null>(null);
-  const [monsterName, setMonsterName] = useState<string | null>(null);
+  const [monsterName, setMonsterName] = useState<string>("null");
   const [monsterImg, setMonsterImg] = useState<string | undefined>(undefined);
 
   const chapterId = useParams().chapterId;
   const classId = useParams().classId;
   const index = SceneData;
+
   function getImageUrl(name: string | undefined | null) {
-    if (!name) return;
+    if (!name || name == "null") return;
     return new URL(`../assets/${name}.png`, import.meta.url).href;
   }
 
@@ -35,31 +37,33 @@ const DialoguePage = () => {
 
   useEffect(() => {
     if (dataStory.type === "scene" && dataStory?.text) {
-      setMonsterName(dataStory.character);
+      setMonsterName(dataStory.character as string);
+      console.log("Monster name:", monsterName);
       setMonsterImg(getImageUrl(monsterName));
-
-      let i = -1;
-      setDisplayText("");
       setIsAnimating(true);
 
-      const type = () => {
-        if (i < dataStory.text.length) {
-          setDisplayText((prev) => prev + dataStory.text.charAt(i));
-          i++;
+      // setTypeIndex(0);
+      // setDisplayText("");
+      // setIsAnimating(true);
 
-          timerIdRef.current = setTimeout(type, 50);
-        } else {
-          setIsAnimating(false);
-          timerIdRef.current = null;
-        }
-      };
-      type();
+      // const type = () => {
+      //   if (typeIndex < dataStory.text.length) {
+      //     setDisplayText((prev) => prev + dataStory.text.charAt(typeIndex));
+      //     setTypeIndex(typeIndex + 1);
 
-      return () => {
-        if (timerIdRef.current) {
-          clearTimeout(timerIdRef.current);
-        }
-      };
+      //     timerIdRef.current = setTimeout(type, 50);
+      //   } else {
+      //     setIsAnimating(false);
+      //     timerIdRef.current = null;
+      //   }
+      // };
+      // type();
+
+      // return () => {
+      //   if (timerIdRef.current) {
+      //     clearTimeout(timerIdRef.current);
+      //   }
+      // };
     }
   }, [dataStory]);
 
@@ -81,11 +85,7 @@ const DialoguePage = () => {
 
   const handleContainerClick = () => {
     if (isAnimating) {
-      if (timerIdRef.current) {
-        clearTimeout(timerIdRef.current);
-      }
       setIsAnimating(false);
-      setDisplayText(dataStory.type === "scene" ? dataStory.text : "");
     } else {
       nextPage();
     }
@@ -96,17 +96,17 @@ const DialoguePage = () => {
       {monsterName !== "null" && (
         <img src={monsterImg} className="absolute h-[80%]" />
       )}
-      <div className="flex p-8 w-screen h-full">
+      <div
+        className="flex p-8 w-screen h-full cursor-pointer"
+        onClick={() => {
+          handleContainerClick();
+        }}
+      >
         <Container
           className="px-5 absolute bottom-0 left-5 m-5 p-5 w-11/12 items-start justify-start"
           children={
-            <div
-              className="relative flex flex-col items-center justify-center h-full gap-5"
-              onClick={() => {
-                handleContainerClick();
-              }}
-            >
-              <div className="flex flex-row text-center items-center">
+            <div className="relative flex flex-col items-center justify-center h-full gap-5">
+              <div className="flex flex-row text-center items-center gap-6">
                 <div className="w-15%">
                   <div
                     className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
@@ -117,7 +117,10 @@ const DialoguePage = () => {
                     {" "}
                     {userData?.name}{" "}
                   </p>
-                  <p className="font-bold text-xl">{displayText}</p>
+                  <Typewriter
+                    text={dataStory.type === "scene" ? dataStory.text : ""}
+                    isAnimating={isAnimating}
+                  />
                 </div>
               </div>
             </div>
