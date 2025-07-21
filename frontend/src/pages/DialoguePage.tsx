@@ -4,7 +4,7 @@ import { useChapter, type StoryDataItem } from "../ChapterContext";
 import { useAuth } from "../AuthContext";
 import { useScene } from "../SceneContext";
 import { ErrorContainer } from "../components/ErrorContainer";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { Typewriter } from "../components/Typewriter";
 
@@ -15,8 +15,6 @@ const DialoguePage = () => {
   const { userData } = useAuth();
 
   const [isAnimating, setIsAnimating] = useState(false);
-
-  const timerIdRef = useRef<NodeJS.Timeout | null>(null);
   const [monsterName, setMonsterName] = useState<string>("null");
   const [monsterImg, setMonsterImg] = useState<string | undefined>(undefined);
 
@@ -41,29 +39,6 @@ const DialoguePage = () => {
       console.log("Monster name:", monsterName);
       setMonsterImg(getImageUrl(monsterName));
       setIsAnimating(true);
-
-      // setTypeIndex(0);
-      // setDisplayText("");
-      // setIsAnimating(true);
-
-      // const type = () => {
-      //   if (typeIndex < dataStory.text.length) {
-      //     setDisplayText((prev) => prev + dataStory.text.charAt(typeIndex));
-      //     setTypeIndex(typeIndex + 1);
-
-      //     timerIdRef.current = setTimeout(type, 50);
-      //   } else {
-      //     setIsAnimating(false);
-      //     timerIdRef.current = null;
-      //   }
-      // };
-      // type();
-
-      // return () => {
-      //   if (timerIdRef.current) {
-      //     clearTimeout(timerIdRef.current);
-      //   }
-      // };
     }
   }, [dataStory]);
 

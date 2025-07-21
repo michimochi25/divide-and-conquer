@@ -138,7 +138,7 @@ export function integrateChallengesIntoStory(
   let questionIndex = 0;
   for (let i = 0; i < sceneCount; i++) {
     fullStory.push(storyData[i]);
-    if (storyData[i].challange == "true") {
+    if (storyData[i].challenge == "true") {
       console.log(questionIndex, questions, questions[questionIndex]);
       const question = questions[questionIndex];
       const challenge: Challenge = {
