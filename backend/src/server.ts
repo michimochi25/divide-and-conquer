@@ -108,18 +108,7 @@ app.post(
     try {
       const { title, textData } = req.body;
       const courseId = req.params.courseId;
-
-      // console.log(questions);
-      // const questions = [
-      //   {
-      //     questionText: "aa",
-      //     options: ["a", "b"],
-      //     correctAnswer: "a",
-      //   },
-      // ];
-
       const questions = await generateQuestions(textData, 8);
-      console.log(questions);
       const auth = await authService.addChapter(courseId, title, questions);
       res.json(auth);
     } catch (err: any) {
@@ -148,8 +137,8 @@ app.post("/gen", upload.single("file"), async (req: Request, res: Response) => {
     }
     // const questions = await generateQuestions(textData, 8);
     // res.json(questions);
-
-    res.json(textData)
+    console.log(`[Backend - /gen] ${textData}`);
+    res.json(textData);
   } catch (err: any) {
     console.error("Error processing file:", err);
     res.status(500).json({ error: `Failed to process file: ${err.message}` });

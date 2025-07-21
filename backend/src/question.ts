@@ -9,8 +9,8 @@ export async function generateQuestions(
   );
 
   const userPrompt = `
-    Generate exactly ${count} distinct multiple-choice questions from the following text ${textData}. The questions should be asking about something that is important for students to remember, preparing them for the theoretical exam. For each question, provide 4 options and ensure the correct answer is one of those options.
-    `;
+    Generate exactly ${count} distinct multiple-choice questions from the following text ${textData}. The questions should be asking about something that is important for students to memorize, preparing them for the theoretical exam. For each question, provide 4 options with answer and ensure the correct answer is one of those options.
+  `;
 
   const payload = {
     contents: [{ role: "user", parts: [{ text: userPrompt }] }],
@@ -28,7 +28,8 @@ export async function generateQuestions(
             },
             options: {
               type: "ARRAY",
-              description: "An array of 4 possible string answers.",
+              description:
+                "An array of exactly 4 possible string answers to the question. Do not prefix the option with alphabet (A.,B.,C.,D.), but rather the answer directly.",
               items: { type: "STRING" },
             },
             correctAnswer: {
@@ -61,6 +62,7 @@ export async function generateQuestions(
     }
 
     const result = await response.json();
+    console.log(`[Backend - candidates] ${result}`);
 
     if (result.candidates && result.candidates[0]?.content?.parts?.[0]) {
       const jsonText = result.candidates[0].content.parts[0].text;

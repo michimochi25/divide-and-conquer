@@ -31,6 +31,7 @@ const CreateChapterForm = ({
   const addChapter = async () => {
     try {
       const questions = await generateQuestions();
+      console.log(`[Frontend - addChapter] ${questions}`);
       await axios.post(`http://localhost:3000/course/${classId}/add-chapter`, {
         title: title,
         textData: questions,
@@ -47,22 +48,30 @@ const CreateChapterForm = ({
   const generateQuestions = async () => {
     if (!file) {
       console.error("No file submitted");
-      return;
+      return "";
     }
 
     const formData = new FormData();
     formData.append("file", file);
-    await fetch("http://localhost:3000/gen", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        return data;
-      })
-      .catch((error) => {
-        console.error("Error processing file:", error);
+
+    try {
+      const response = await fetch("http://localhost:3000/gen", {
+        method: "POST",
+        body: formData,
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(`[Frontend - generateQuestions] ${data}`);
+      return data;
+    } catch (error) {
+      console.error("Error processing file:", error);
+      // Re-throw the error or return a specific error value
+      throw error;
+    }
   };
 
   return (
