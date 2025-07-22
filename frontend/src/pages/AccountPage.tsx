@@ -50,12 +50,12 @@ const AccountPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-screen text-xl gap-2">
-      <div className="flex gap-5 justify-between w-[90%] max-w-full px-10 z-0">
+    <div className="p-4 flex flex-col items-center justify-center h-screen w-screen text-xl gap-2">
+      <div className="flex gap-5 justify-center sm:w-[90%] z-0 flex-wrap">
         <Container
-          className="p-8"
+          className="container max-h-full justify-between overflow-auto sm:w-auto p-5 max-w-full mx-2"
           children={
-            <div className="flex flex-col items-center justify-center gap-5">
+            <div className="flex flex-col items-center justify-center gap-5 w-full h-full">
               <p className="font-bold text-2xl">{userData?.name}</p>
               <div className="flex flex-col items-center justify-center gap-2">
                 <Button
@@ -80,7 +80,7 @@ const AccountPage = () => {
             </div>
           }
         />
-        <div className="flex flex-col gap-5 flex-1 items-center">
+        <div className="flex flex-col gap-5 items-center">
           <RoleBar role={`${userData?.isAdmin ? "Admin" : "Student"}`} />
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-2">

@@ -1,38 +1,47 @@
 import { useState, useEffect } from "react";
+import { twMerge } from "tailwind-merge";
 
 const Typewriter = ({
   text,
   isAnimating,
   speed = 30,
+  className = "",
 }: {
-  text: string;
+  text: string[];
   isAnimating: boolean;
   speed?: number;
+  className?: string;
 }) => {
   const [displayedText, setDisplayedText] = useState("");
-  const [index, setIndex] = useState(0);
+  const [textIndex, setTextIndex] = useState(0); // which string in the array
+  const [charIndex, setCharIndex] = useState(0);
 
   useEffect(() => {
     if (isAnimating) {
       setDisplayedText("");
-      setIndex(0);
+      setTextIndex(0);
+      setCharIndex(0);
     } else {
-      setDisplayedText(text);
-      setIndex(text.length);
+      setDisplayedText(text[textIndex] || "");
     }
   }, [isAnimating]);
 
   useEffect(() => {
-    if (index < text.length) {
+    if (!isAnimating || textIndex >= text.length) return;
+    const current = text[textIndex];
+
+    if (charIndex < current.length) {
       const timeoutId = setTimeout(() => {
-        setDisplayedText((prev) => prev + text.charAt(index));
-        setIndex((prev) => prev + 1);
+        setDisplayedText((prev) => prev + current.charAt(charIndex));
+        setCharIndex((prev) => prev + 1);
       }, speed);
       return () => clearTimeout(timeoutId);
     }
-  }, [index, text, speed]);
+  }, [charIndex, text, speed]);
 
-  return <p className="font-bold text-xl">{displayedText}</p>;
+  return (
+    <p className={twMerge("font-bold text-xl", className)}>{displayedText}</p>
+  );
 };
 
 export { Typewriter };

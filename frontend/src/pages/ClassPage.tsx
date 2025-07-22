@@ -41,10 +41,9 @@ const ClassPage = () => {
     navigate(`/${classId}/chapter/${chapter._id}/dialogue`);
   };
 
-  console.log(chapters);
   return (
-    <div className="flex flex-col items-center gap-4 justify-between h-full w-full">
-      <div className="flex items-center text-3xl font-bold mb-4 gap-4 justify-between w-full">
+    <div className="flex flex-col items-center gap-4 justify-start h-full w-full">
+      <div className="flex items-center text-3xl font-bold mb-4 gap-4 justify-between w-full flex-wrap">
         {userData?.isAdmin && (
           <Button text="+" onClick={() => setViewForm(!viewForm)} />
         )}
@@ -58,7 +57,7 @@ const ClassPage = () => {
           fetchChapters={fetchChapters}
         />
       ) : (
-        <div className="container flex flex-col gap-4 overflow-auto w-140">
+        <div className="container flex flex-col gap-4 overflow-auto sm:w-140">
           {chapters.map((chapter, index) => (
             <ChapterCard
               key={index}

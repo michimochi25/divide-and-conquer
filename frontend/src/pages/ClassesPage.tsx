@@ -43,7 +43,7 @@ const ClassPage = () => {
   }, [userData]);
 
   return (
-    <div className="flex flex-col items-center gap-4 justify-between h-full">
+    <div className="flex flex-col items-center gap-4 justify-between h-full w-full">
       <div className="flex items-center text-3xl font-bold mb-4 gap-4 justify-between w-full">
         <Button text="+" onClick={() => setShowForm(!showForm)} />
         <p>My Classes</p>
@@ -55,13 +55,14 @@ const ClassPage = () => {
           isAdmin={userData?.isAdmin || false}
         />
       ) : (
-        <div className="container grid grid-cols-3 flex-1 gap-4 overflow-auto w-140 sm:flex-row">
+        <div className="container flex flex-col sm:flex-row flex-1 gap-4 overflow-scroll max-w-full sm:w-140">
           {data.map((item, index) => (
             <ClassCard
               key={item._id}
               title={item.title}
               description={item.description}
               chapters={item.chapters.length}
+              className="sm:min-w-[30%]"
               onClick={() =>
                 navigate(`${url}/${item._id}`, { state: { data: data[index] } })
               }

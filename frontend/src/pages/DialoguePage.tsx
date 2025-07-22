@@ -32,6 +32,7 @@ const DialoguePage = () => {
   }
 
   const dataStory: StoryDataItem = chapterData?.storyData[index];
+  const queue = dataStory.type === "scene" ? dataStory.text.split(".") : [];
 
   useEffect(() => {
     if (dataStory.type === "scene" && dataStory?.text) {
@@ -72,28 +73,28 @@ const DialoguePage = () => {
         <img src={monsterImg} className="absolute h-[80%]" />
       )}
       <div
-        className="flex p-8 w-screen h-full cursor-pointer"
+        className="flex w-screen h-full cursor-pointer"
         onClick={() => {
           handleContainerClick();
         }}
       >
         <Container
-          className="px-5 absolute bottom-0 left-5 m-5 p-5 w-11/12 items-start justify-start"
+          className="px-5 absolute bottom-0 sm:m-5 p-5 w-full sm:w-11/12 items-start justify-start"
           children={
             <div className="relative flex flex-col items-center justify-center h-full gap-5">
-              <div className="flex flex-row text-center items-center gap-6">
-                <div className="w-15%">
+              <div className="grid grid-cols-[1fr_2fr] text-center items-center gap-2">
+                <div className="w-[15%]">
                   <div
                     className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
                   />
                 </div>
-                <div className="flex flex-2 flex-col text-left">
+                <div className="text-left">
                   <p className="font-bold text-left text-2xl">
                     {" "}
                     {userData?.name}{" "}
                   </p>
                   <Typewriter
-                    text={dataStory.type === "scene" ? dataStory.text : ""}
+                    text={dataStory.type === "scene" ? queue : []}
                     isAnimating={isAnimating}
                   />
                 </div>

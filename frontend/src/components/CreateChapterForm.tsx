@@ -82,7 +82,7 @@ const CreateChapterForm = ({
         value={title}
         setter={setTitle}
       />
-      <div className="flex justify-between items-center w-full h-full">
+      <div className="flex justify-between items-center w-full h-full flex-wrap gap-2">
         <Container
           children={
             <>
@@ -91,12 +91,12 @@ const CreateChapterForm = ({
                 onClick={() => fileInputRef.current?.click()}
               >
                 {file ? (
-                  <p className="w-96 text-center break-all h-full flex items-center justify-center">
+                  <p className="sm:w-96 text-center break-all h-full flex items-center justify-center">
                     Uploaded {file.name}
                   </p>
                 ) : (
                   <>
-                    <p className="w-96 text-center">
+                    <p className="sm:w-96 text-center">
                       Upload course notes and make AI-Generated questions
                     </p>
                     <img src={notesIcon} width={45} height={45} />

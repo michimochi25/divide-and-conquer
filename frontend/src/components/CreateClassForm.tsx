@@ -52,8 +52,8 @@ const CreateClassForm = ({
           className="flex-1 flex flex-col justify-between"
           onSubmit={(e) => handleCreateClass(e)}
         >
-          <div className="flex flex-col gap-4 w-140 items-center">
-            <div className="flex gap-2 w-full justify-between items-center">
+          <div className="flex flex-col gap-4 sm:w-140 items-center">
+            <div className="flex sm:flex-row flex-col gap-2 w-full justify-between items-center">
               <label htmlFor="title" className="text-xl font-semibold">
                 Class Title
               </label>
@@ -65,7 +65,7 @@ const CreateClassForm = ({
                 value={title}
               />
             </div>
-            <div className="flex gap-2 w-full justify-between items-center">
+            <div className="flex sm:flex-row flex-col gap-2 w-full justify-between items-center">
               <label htmlFor="title" className="text-xl font-semibold">
                 Description
               </label>
