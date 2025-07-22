@@ -102,6 +102,7 @@ const DialoguePage = () => {
                   </p>
                   <Typewriter
                     text={dataStory.type === "scene" ? queue : []}
+                    setIsAnimating={setIsAnimating}
                     isAnimating={isAnimating}
                   />
                 </div>
