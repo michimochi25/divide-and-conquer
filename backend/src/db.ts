@@ -31,21 +31,34 @@ export async function connectDb() {
     const usersCount = await usersCollection.countDocuments();
     if (usersCount === 0) {
       await usersCollection.insertOne({
-        users: [],
+        name: "Admin",
+        avatar: 5,
+        email: "admin@gmail.com",
+        createdAt: new Date(),
+        isAdmin: true,
+        courses: [], // if admin: courses created by admin, if student: courses enrolled in
       });
     }
 
     const coursesCount = await coursesCollection.countDocuments();
     if (coursesCount === 0) {
       await coursesCollection.insertOne({
-        courses: [],
+        title: "Default Class",
+        description: "Default class description",
+        createdAt: new Date(),
+        userId: "admin1234",
+        chapters: [],
       });
     }
 
     const chaptersCount = await chaptersCollection.countDocuments();
     if (chaptersCount === 0) {
       await chaptersCollection.insertOne({
-        chapters: [],
+        courseId: "course1234",
+        title: "Default Chapter",
+        createdAt: new Date(),
+        question: [],
+        storyData: [],
       });
     }
   } catch (error) {
