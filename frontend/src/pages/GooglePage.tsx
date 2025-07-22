@@ -5,7 +5,7 @@ const GooglePage = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen text-xl gap-2">
       <BackButton />
-      <h1 className="mb-4">Continue with Google</h1>
+      <h1 className="mb-4 text-center">Continue with Google</h1>
       <CustomGoogleLogin />
     </div>
   );
