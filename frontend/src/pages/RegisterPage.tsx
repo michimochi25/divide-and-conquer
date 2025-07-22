@@ -34,10 +34,10 @@ const RegisterPage = () => {
     <div className="flex flex-col items-center justify-center h-screen w-screen text-xl gap-2">
       <BackButton />
       <form
-        className="flex flex-col items-center justify-center h-screen w-screen text-xl"
+        className="flex flex-col items-center justify-center h-screen w-screen text-xl gap-5 sm:gap-0"
         onSubmit={handleSubmit}
       >
-        <div className="flex items-center justify-between mb-4 w-[70%]">
+        <div className="flex flex-col gap-1 sm:flex-row items-center justify-between mb-4 w-[70%]">
           <h1>I am a</h1>
           <div className="flex gap-2">
             <Button
@@ -54,7 +54,7 @@ const RegisterPage = () => {
             />
           </div>
         </div>
-        <div className="flex items-center justify-between mb-4 w-[70%]">
+        <div className="flex flex-col gap-1 sm:flex-row items-center justify-between mb-4 w-[70%]">
           <h1>My name is</h1>
           <Input name="name" placeholder="Name" value={name} setter={setName} />
         </div>
