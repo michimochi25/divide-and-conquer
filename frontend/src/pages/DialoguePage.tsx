@@ -72,7 +72,7 @@ const DialoguePage = () => {
       className={twMerge(
         "flex flex-col relative items-center justify-center h-screen w-screen text-xl gap-2",
         dataStory.type === "scene" && dataStory.background === "night"
-          ? "bg-[url(/src/assets/night-bg.png)]"
+          ? "bg-[url(/src/assets/night-bg.png)] bg-bottom"
           : ""
       )}
     >
