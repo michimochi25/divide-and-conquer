@@ -4,7 +4,7 @@ import { useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { Button } from "./Button";
 import axios from "axios";
 import { Input } from "./Input";
-import type { Question } from "../ChapterContext";
+import { CircularProgress } from "@mui/material";
 
 const CreateChapterForm = ({
   classId,
@@ -18,6 +18,7 @@ const CreateChapterForm = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -30,16 +31,29 @@ const CreateChapterForm = ({
 
   const addChapter = async () => {
     try {
+      if (!title || title.trim() === "") {
+        console.error("Title is required");
+        return;
+      }
+
+      if (!file) {
+        console.error("File is required");
+        return;
+      }
+
+      setSubmitted(true);
       const questions = await generateQuestions();
       console.log(`[Frontend - addChapter] ${questions}`);
       await axios.post(`http://localhost:3000/course/${classId}/add-chapter`, {
         title: title,
         textData: questions,
       });
+
       setViewForm(false);
       fetchChapters();
       setFile(null);
       setTitle("");
+      setSubmitted(false);
     } catch (error) {
       console.error("Error adding chapter:", error);
     }
@@ -76,51 +90,60 @@ const CreateChapterForm = ({
 
   return (
     <div className="flex-1 flex flex-col w-full h-full gap-2">
-      <Input
-        type="string"
-        placeholder="Chapter title"
-        value={title}
-        setter={setTitle}
-      />
-      <div className="flex justify-between items-center w-full h-full flex-wrap gap-2">
-        <Container
-          children={
-            <>
-              <div
-                className="w-full h-full p-1 flex flex-col justify-center items-center gap-3 cursor-pointer"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                {file ? (
-                  <p className="sm:w-96 text-center break-all h-full flex items-center justify-center">
-                    Uploaded {file.name}
-                  </p>
-                ) : (
-                  <>
-                    <p className="sm:w-96 text-center">
-                      Upload course notes and make AI-Generated questions
-                    </p>
-                    <img src={notesIcon} width={45} height={45} />
-                    <p>accepts .pdf, .txt</p>
-                  </>
-                )}
-                <input
-                  type="file"
-                  accept=".pdf,.txt"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </div>
-            </>
-          }
-        />
-        <Button
-          text="Submit"
-          type="button"
-          onClick={() => addChapter()}
-          className="text-2xl"
-        />
-      </div>
+      {submitted ? (
+        <div className="flex flex-col gap-4 items-center justify-center w-full h-full">
+          <p>Generating questions...</p>
+          <CircularProgress size="3rem" color="inherit" />
+        </div>
+      ) : (
+        <>
+          <Input
+            type="string"
+            placeholder="Chapter title"
+            value={title}
+            setter={setTitle}
+          />
+          <div className="flex justify-between items-center w-full h-full flex-wrap gap-2">
+            <Container
+              children={
+                <>
+                  <div
+                    className="w-full h-full p-1 flex flex-col justify-center items-center gap-3 cursor-pointer"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    {file ? (
+                      <p className="sm:w-96 text-center break-all h-full flex items-center justify-center">
+                        Uploaded {file.name}
+                      </p>
+                    ) : (
+                      <>
+                        <p className="sm:w-96 text-center">
+                          Upload course notes and make AI-Generated questions
+                        </p>
+                        <img src={notesIcon} width={45} height={45} />
+                        <p>accepts .pdf, .txt</p>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      accept=".pdf,.txt"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </div>
+                </>
+              }
+            />
+            <Button
+              text="Submit"
+              type="button"
+              onClick={() => addChapter()}
+              className="text-2xl"
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };
