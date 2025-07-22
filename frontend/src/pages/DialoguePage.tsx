@@ -37,8 +37,8 @@ const DialoguePage = () => {
   useEffect(() => {
     if (dataStory.type === "scene" && dataStory?.text) {
       setMonsterName(dataStory.character as string);
-      console.log("Monster name:", monsterName);
-      setMonsterImg(getImageUrl(monsterName));
+      console.log(`Monster name: ${monsterName}, ${dataStory.character}`);
+      setMonsterImg(getImageUrl(dataStory.character as string));
       setIsAnimating(true);
     }
   }, [dataStory]);
