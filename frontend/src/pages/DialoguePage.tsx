@@ -68,7 +68,14 @@ const DialoguePage = () => {
   };
 
   return (
-    <div className="flex flex-col relative items-center justify-center h-screen w-screen text-xl gap-2">
+    <div
+      className={twMerge(
+        "flex flex-col relative items-center justify-center h-screen w-screen text-xl gap-2",
+        dataStory.type === "scene" && dataStory.background === "night"
+          ? "bg-[url(/src/assets/night-bg.png)]"
+          : ""
+      )}
+    >
       {monsterName !== "null" && (
         <img src={monsterImg} className="absolute h-[80%]" />
       )}
@@ -81,8 +88,8 @@ const DialoguePage = () => {
         <Container
           className="px-5 absolute bottom-0 sm:m-5 p-5 w-full sm:w-11/12 items-start justify-start"
           children={
-            <div className="relative flex flex-col items-center justify-center h-full gap-5">
-              <div className="grid grid-cols-[1fr_2fr] text-center items-center gap-2">
+            <div className="relative flex flex-col items-center justify-center h-full gap-5 w-full">
+              <div className="grid grid-cols-[1fr_2fr] text-center items-center gap-2 w-full">
                 <div className="w-[15%]">
                   <div
                     className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
