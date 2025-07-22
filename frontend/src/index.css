@@ -228,3 +228,24 @@ h1 {
   width: 0;
   height: 0;
 }
+
+.night-bg {
+  background-image: url("./assets/night-bg.png");
+  background-position: bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
+  animation: fadeIn 1s ease-in forwards;
+}
+
+.animate-in {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

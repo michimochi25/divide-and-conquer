@@ -21,6 +21,11 @@ const CreateClassFormStudent = ({
 
   const handleEnrolClass = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!id || id.trim() === "") {
+      console.error("Class ID is required");
+      return;
+    }
+
     try {
       const response = await axios.put(
         `http://localhost:3000/user/${userData?._id}/courses`,
@@ -45,7 +50,7 @@ const CreateClassFormStudent = ({
       className="flex-1 flex flex-col justify-between"
       onSubmit={(e) => handleEnrolClass(e)}
     >
-      <div className="flex flex-col gap-4 w-140 items-center">
+      <div className="flex flex-col gap-4 sm:w-140 items-center">
         <div className="flex gap-2 w-full justify-between items-center">
           <label htmlFor="title" className="text-xl font-semibold">
             Class ID

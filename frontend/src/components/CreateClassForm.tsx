@@ -25,6 +25,21 @@ const CreateClassForm = ({
 
   const handleCreateClass = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!title || title.trim() === "") {
+      console.error("Title is required");
+      return;
+    }
+
+    if (!description || description.trim() === "") {
+      console.error("Description is required");
+      return;
+    }
+
+    if (!userData?._id) {
+      console.error("User ID is required");
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:3000/add-course", {
         userId: userData?._id,

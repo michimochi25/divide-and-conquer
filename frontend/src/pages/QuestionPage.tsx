@@ -42,7 +42,7 @@ const QuestionPage = () => {
 
   return (
     <div className="flex flex-col relative items-center justify-center h-screen w-screen text-xl gap-2">
-      <img src={monsterImg} className="absolute max-h-[80%]" />
+      <img src={monsterImg} className="absolute max-h-[80%] animate-in" />
       <div className="flex p-8 max-w-full h-full">
         <Container
           className="px-5"
