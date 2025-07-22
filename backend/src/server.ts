@@ -3,7 +3,7 @@ import cors from "cors";
 import multer from "multer";
 import pdf from "pdf-parse";
 
-import * as authService from "./auth";
+import * as service from "./service";
 import { closeDb, connectDb } from "./db";
 import { generateQuestions } from "./question";
 import { generateWavAudio } from "./audio";
@@ -23,7 +23,7 @@ const upload = multer({ storage: storage });
 app.post("/register", async function register(req: Request, res: Response) {
   try {
     const { email, name, isAdmin } = req.body;
-    const auth = await authService.authRegister(email, name, isAdmin);
+    const auth = await service.authRegister(email, name, isAdmin);
     res.json(auth);
   } catch (err: any) {
     res.status(400).json({ error: err.message });
@@ -33,7 +33,7 @@ app.post("/register", async function register(req: Request, res: Response) {
 app.get("/user/:userId", async function getUser(req: Request, res: Response) {
   try {
     const userId = req.params.userId;
-    const user = await authService.getUser(userId);
+    const user = await service.getUser(userId);
     res.json(user);
   } catch (err: any) {
     res.status(400).json({ error: err.message });
@@ -45,7 +45,7 @@ app.get(
   async function getUserByEmail(req: Request, res: Response) {
     try {
       const email = req.params.email;
-      const exists = await authService.checkEmailExists(email);
+      const exists = await service.checkEmailExists(email);
       res.json(exists);
     } catch (err: any) {
       res.status(400).json({ error: err.message });
@@ -58,7 +58,7 @@ app.get(
   async function getCoursesByUserId(req: Request, res: Response) {
     try {
       const userId = req.params.userId;
-      const courses = await authService.getAllCourses(userId);
+      const courses = await service.getAllCourses(userId);
       res.json(courses);
     } catch (err: any) {
       res.status(400).json({ error: err.message });
@@ -71,7 +71,7 @@ app.get(
   async function getChaptersByCourse(req: Request, res: Response) {
     try {
       const courseId = req.params.courseId;
-      const chapters = await authService.getAllChapter(courseId);
+      const chapters = await service.getAllChapter(courseId);
       res.json(chapters);
     } catch (err: any) {
       res.status(400).json({ error: err.message });
@@ -82,7 +82,7 @@ app.get(
 app.post("/add-course", async function addCourse(req: Request, res: Response) {
   try {
     const { userId, title, description } = req.body;
-    const resp = await authService.addCourse(userId, title, description);
+    const resp = await service.addCourse(userId, title, description);
     res.json(resp);
   } catch (err: any) {
     res.status(400).json({ error: err.message });
@@ -94,7 +94,7 @@ app.get(
   async function getChapterById(req: Request, res: Response) {
     try {
       const courseId = req.params.chapterId;
-      const chapter = await authService.getChapter(courseId);
+      const chapter = await service.getChapter(courseId);
       res.json(chapter);
     } catch (err: any) {
       res.status(400).json({ error: err.message });
@@ -109,7 +109,7 @@ app.post(
       const { title, textData } = req.body;
       const courseId = req.params.courseId;
       const questions = await generateQuestions(textData, 8);
-      const auth = await authService.addChapter(courseId, title, questions);
+      const auth = await service.addChapter(courseId, title, questions);
       res.json(auth);
     } catch (err: any) {
       res.status(400).json({ error: err.message });
@@ -151,7 +151,7 @@ app.put(
     try {
       const userId = req.params.userId;
       const { courseId } = req.body;
-      const resp = await authService.enrollClass(userId, courseId);
+      const resp = await service.enrollClass(userId, courseId);
       res.json(resp);
     } catch (err: any) {
       res.status(400).json({ error: err.message });
@@ -163,7 +163,7 @@ app.put("/user/:userId", async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const { data } = req.body;
-    const updatedData = await authService.updateUser(userId, data);
+    const updatedData = await service.updateUser(userId, data);
     res.json(updatedData);
   } catch (err: any) {
     res.status(400).json({ error: err.message });
