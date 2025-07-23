@@ -85,7 +85,7 @@ const DialoguePage = () => {
         }}
       >
         <Container
-          className="px-5 absolute bottom-0 right-50 translate-x-45 sm:m-5 p-5 w-full sm:w-11/12 items-start justify-start"
+          className="px-5 absolute bottom-0 sm:right-50 sm:translate-x-45 sm:m-5 p-5 w-full sm:w-11/12 items-start justify-start"
           children={
             <div className="relative flex flex-col items-center justify-center h-full gap-5 w-full">
               <div className="grid grid-cols-[1fr_2fr] text-center items-center gap-2 w-full">
