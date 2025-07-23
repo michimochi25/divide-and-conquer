@@ -4,6 +4,8 @@ import { Container } from "../components/Container";
 import { useChapter } from "../ChapterContext";
 import { useScene } from "../SceneContext";
 import { ErrorContainer } from "../components/ErrorContainer";
+import { twMerge } from "tailwind-merge";
+import { useState } from "react";
 
 const QuestionPage = () => {
   const navigate = useNavigate();
@@ -11,6 +13,8 @@ const QuestionPage = () => {
   const { SceneData, setSceneData } = useScene();
   const chapterId = useParams().chapterId;
   const classId = useParams().classId;
+
+  const [wrongAnswer, setWrongAnswer] = useState<number | null>(null);
 
   const index = SceneData;
   function getImageUrl(name: string | undefined) {
@@ -33,11 +37,15 @@ const QuestionPage = () => {
       )
     ) {
       setSceneData(index + 1);
+      navigate(`/${classId}/chapter/${chapterId}/dialogue`);
     } else {
-      setSceneData(index - 1);
+      setWrongAnswer(opt_index);
+      setTimeout(() => {
+        setSceneData(index - 1);
+        navigate(`/${classId}/chapter/${chapterId}/dialogue`);
+        setWrongAnswer(null);
+      }, 1000);
     }
-
-    navigate(`/${classId}/chapter/${chapterId}/dialogue`);
   };
 
   return (
@@ -58,7 +66,10 @@ const QuestionPage = () => {
                     <Button
                       key={i}
                       text={option}
-                      className="w-full h-full text-2xl sm:text-xl flex-1"
+                      className={twMerge(
+                        "w-full h-full text-2xl sm:text-xl flex-1",
+                        i === wrongAnswer ? "bg-red-300" : ""
+                      )}
                       onClick={() => {
                         nextPage(i);
                       }}
