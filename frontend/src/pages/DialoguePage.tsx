@@ -76,7 +76,7 @@ const DialoguePage = () => {
   return (
     <>
       {monsterName !== "null" && (
-        <img src={monsterImg} className="absolute h-[80%]" />
+        <img src={monsterImg} className="absolute max-h-[80%]" />
       )}
       <div
         className="flex w-screen h-full cursor-pointer"
