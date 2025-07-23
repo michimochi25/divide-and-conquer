@@ -70,13 +70,14 @@ const DialoguePage = () => {
       setIsAnimating(false);
     } else {
       nextPage();
+      setIsAnimating(true);
     }
   };
 
   return (
     <>
       {monsterName !== "null" && (
-        <img src={monsterImg} className="absolute max-h-[80%]" />
+        <img src={monsterImg} className="absolute max-h-[80%] animate-in" />
       )}
       <div
         className="flex w-screen h-full cursor-pointer"
