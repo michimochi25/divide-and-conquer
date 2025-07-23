@@ -11,6 +11,7 @@ const QuestionPage = () => {
   const navigate = useNavigate();
   const { chapterData } = useChapter();
   const { SceneData, setSceneData } = useScene();
+
   const chapterId = useParams().chapterId;
   const classId = useParams().classId;
 
@@ -31,6 +32,8 @@ const QuestionPage = () => {
   const monsterImg = getImageUrl(monsterName);
 
   const nextPage = (opt_index: number) => {
+    console.log("Chosen option: ", opt_index);
+    console.log("Correct answer: ", opt_index);
     if (
       dataStory[index].options[opt_index].includes(
         dataStory[index].correctAnswer
@@ -49,7 +52,7 @@ const QuestionPage = () => {
   };
 
   return (
-    <div className="flex flex-col relative items-center justify-center h-screen w-screen text-xl gap-2">
+    <>
       <img src={monsterImg} className="absolute max-h-[80%] animate-in" />
       <div className="flex p-8 max-w-full h-full">
         <Container
@@ -88,7 +91,7 @@ const QuestionPage = () => {
           }
         />
       </div>
-    </div>
+    </>
   );
 };
 

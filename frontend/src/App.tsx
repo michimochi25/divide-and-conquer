@@ -16,6 +16,7 @@ import ErrorPage from "./pages/ErrorPage";
 import UnauthenticatedPage from "./pages/UnauthenticatedPage";
 import { useState } from "react";
 import { ErrorContainer } from "./components/ErrorContainer";
+import GameLayout from "./pages/GameLayout";
 
 function App() {
   const [error, setError] = useState<string>("");
@@ -53,25 +54,16 @@ function App() {
           }
         />
         <Route
-          path="/:classId/chapter/:chapterId/question"
+          path="/:classId/chapter/:chapterId"
           element={
             <AuthWrapper>
-              {/* <ProtectedRoute> */}
-              <QuestionPage />
-              {/* </ProtectedRoute> */}
+              <GameLayout />
             </AuthWrapper>
           }
-        />
-        <Route
-          path="/:classId/chapter/:chapterId/dialogue"
-          element={
-            <AuthWrapper>
-              {/* <ProtectedRoute> */}
-              <DialoguePage />
-              {/* </ProtectedRoute> */}
-            </AuthWrapper>
-          }
-        />
+        >
+          <Route path="question" element={<QuestionPage />} />
+          <Route path="dialogue" element={<DialoguePage />} />
+        </Route>
         <Route
           path="/user/:userId"
           element={

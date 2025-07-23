@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { Container } from "../components/Container";
 import { useChapter, type StoryDataItem } from "../ChapterContext";
 import { useAuth } from "../AuthContext";
@@ -13,6 +13,9 @@ const DialoguePage = () => {
   const { SceneData, setSceneData } = useScene();
   const { chapterData } = useChapter();
   const { userData } = useAuth();
+  const { setNightMode } = useOutletContext<{
+    setNightMode: (value: boolean) => void;
+  }>();
 
   const [isAnimating, setIsAnimating] = useState(false);
   const [monsterName, setMonsterName] = useState<string>("null");
@@ -35,11 +38,14 @@ const DialoguePage = () => {
   const queue = dataStory.type === "scene" ? dataStory.text.split(".") : [];
 
   useEffect(() => {
-    if (dataStory.type === "scene" && dataStory?.text) {
-      setMonsterName(dataStory.character as string);
-      console.log(`Monster name: ${monsterName}, ${dataStory.character}`);
-      setMonsterImg(getImageUrl(dataStory.character as string));
-      setIsAnimating(true);
+    if (dataStory.type === "scene") {
+      setNightMode(dataStory.background === "night");
+      if (dataStory?.text) {
+        setMonsterName(dataStory.character as string);
+        console.log(`Monster name: ${monsterName}, ${dataStory.character}`);
+        setMonsterImg(getImageUrl(dataStory.character as string));
+        setIsAnimating(true);
+      }
     }
   }, [dataStory]);
 
@@ -68,14 +74,7 @@ const DialoguePage = () => {
   };
 
   return (
-    <div
-      className={twMerge(
-        "flex flex-col relative items-center justify-center h-screen w-screen text-xl gap-2",
-        dataStory.type === "scene" && dataStory.background === "night"
-          ? "night-bg"
-          : ""
-      )}
-    >
+    <>
       {monsterName !== "null" && (
         <img src={monsterImg} className="absolute h-[80%]" />
       )}
@@ -86,7 +85,7 @@ const DialoguePage = () => {
         }}
       >
         <Container
-          className="px-5 absolute bottom-0 sm:m-5 p-5 w-full sm:w-11/12 items-start justify-start"
+          className="px-5 absolute bottom-0 right-50 translate-x-45 sm:m-5 p-5 w-full sm:w-11/12 items-start justify-start"
           children={
             <div className="relative flex flex-col items-center justify-center h-full gap-5 w-full">
               <div className="grid grid-cols-[1fr_2fr] text-center items-center gap-2 w-full">
@@ -111,7 +110,7 @@ const DialoguePage = () => {
           }
         />
       </div>
-    </div>
+    </>
   );
 };
 
