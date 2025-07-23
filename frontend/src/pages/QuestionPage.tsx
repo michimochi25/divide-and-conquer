@@ -63,7 +63,7 @@ const QuestionPage = () => {
                 {dataStory[index].challengeText}
               </p>
 
-              <div className="grid grid-cols-2 items-center justify-center gap-2">
+              <div className="sm:grid sm:grid-cols-2 flex flex-col items-center justify-center gap-2">
                 {dataStory[index] &&
                   dataStory[index].options.map((option, i) => (
                     <Button
