@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import BackIcon from "../assets/backward-icon.svg";
 
-const BackButton = () => {
+const BackButton = ({ back }: { back?: boolean }) => {
   const navigate = useNavigate();
   const currentPath = useLocation().pathname;
   let path = currentPath;
@@ -11,7 +11,10 @@ const BackButton = () => {
   }
 
   return (
-    <button className="absolute top-4 left-4" onClick={() => navigate(path)}>
+    <button
+      className="absolute top-4 left-4"
+      onClick={() => (back ? navigate(-1) : navigate(path))}
+    >
       <img
         src={BackIcon}
         alt="Arrow pointing to the left indicating backward navigation"
