@@ -6,7 +6,7 @@ import CreateClassForm from "../components/CreateClassForm";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
 
-type ClassData = {
+export type ClassData = {
   _id: string;
   title: string;
   description: string;

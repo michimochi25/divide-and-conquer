@@ -67,6 +67,19 @@ app.get(
 );
 
 app.get(
+  "/course/:courseId",
+  async function getCourseInfo(req: Request, res: Response) {
+    try {
+      const courseId = req.params.courseId;
+      const course = await service.getCourseInfo(courseId);
+      res.json(course);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+);
+
+app.get(
   "/course/:courseId/chapters/",
   async function getChaptersByCourse(req: Request, res: Response) {
     try {

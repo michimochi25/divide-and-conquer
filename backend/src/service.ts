@@ -231,3 +231,15 @@ export async function getChapter(chapterId: string) {
 
   return { chapter: chapter };
 }
+
+export async function getCourseInfo(courseId: string) {
+  const course = await coursesCollection.findOne({
+    _id: new ObjectId(courseId),
+  });
+
+  if (!course || course === undefined) {
+    throw new Error(`ID ${courseId} COURSE_DOES_NOT_EXIST`);
+  }
+
+  return { course: course };
+}

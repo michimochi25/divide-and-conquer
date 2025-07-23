@@ -8,12 +8,14 @@ import axios from "axios";
 import { useChapter } from "../ChapterContext";
 import { useScene } from "../SceneContext";
 import { useAuth } from "../AuthContext";
+import type { ClassData } from "./ClassesPage";
 
 const ClassPage = () => {
   const navigate = useNavigate();
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [viewForm, setViewForm] = useState(false);
-  const data = useLocation().state?.data || { title: "Not Found" };
+  const [data, setData] = useState<ClassData>(useLocation().state?.data || {});
+
   const classId = useParams().classId || data._id;
   const { setChapterData } = useChapter();
   const { userData } = useAuth();
@@ -31,8 +33,25 @@ const ClassPage = () => {
     }
   };
 
+  const getCourseInfo = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/course/${classId}`
+      );
+      console.log("Fetched course info:", response.data);
+      setData(response.data.course);
+      return response.data.course;
+    } catch (error) {
+      console.error("Error fetching course info:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     fetchChapters();
+    if (Object.keys(data).length === 0) {
+      getCourseInfo();
+    }
   }, []);
 
   const nextPage = (chapter: Chapter) => {
