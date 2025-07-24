@@ -22,6 +22,9 @@ export async function connectDb() {
     const db = client.db();
     console.log(`Successfully connected to database: ${db.databaseName}`);
 
+    // reset database
+    await db.dropDatabase();
+
     // Initialize collections
     usersCollection = db.collection("users");
     coursesCollection = db.collection("courses");

@@ -241,6 +241,28 @@ h1 {
   animation: fadeIn 1s ease-in forwards;
 }
 
+.slide-in {
+  animation: slideIn 0.5s ease-in forwards;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

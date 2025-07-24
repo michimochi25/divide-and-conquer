@@ -31,23 +31,19 @@ const QuestionPage = () => {
   const monsterName = dataStory[index - 1].character;
   const monsterImg = getImageUrl(monsterName);
 
-  const nextPage = (opt_index: number) => {
-    console.log("Chosen option: ", opt_index);
-    console.log("Correct answer: ", opt_index);
-    if (
-      dataStory[index].options[opt_index].includes(
-        dataStory[index].correctAnswer
-      )
-    ) {
+  const nextPage = (optIndex: number) => {
+    console.log("Chosen option: ", optIndex);
+    console.log("Correct answer: ", dataStory[index].correctAnswer);
+    if (optIndex === dataStory[index].correctAnswer) {
       setSceneData(index + 1);
       navigate(`/${classId}/chapter/${chapterId}/dialogue`);
     } else {
-      setWrongAnswer(opt_index);
+      setWrongAnswer(optIndex);
       setTimeout(() => {
         setSceneData(index - 1);
         navigate(`/${classId}/chapter/${chapterId}/dialogue`);
         setWrongAnswer(null);
-      }, 1000);
+      }, 2000);
     }
   };
 

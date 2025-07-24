@@ -10,14 +10,14 @@ export interface Scene {
 export interface Question {
   questionText: string;
   options: string[];
-  correctAnswer: string;
+  correctAnswer: number;
 }
 
 export interface Challenge {
   type: "challenge";
   challengeText: string;
   options: string[];
-  correctAnswer: string;
+  correctAnswer: number;
 }
 
 export type StoryDataItem = Scene | Challenge;
