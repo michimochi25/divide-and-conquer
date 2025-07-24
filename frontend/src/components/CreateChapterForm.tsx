@@ -44,7 +44,7 @@ const CreateChapterForm = ({
       setSubmitted(true);
       const questions = await generateQuestions();
       console.log(`[Frontend - addChapter] ${questions}`);
-      await axios.post(`http://localhost:3000/course/${classId}/add-chapter`, {
+      await axios.post(`https://divide-and-conquer-production.up.railway.app/course/${classId}/add-chapter`, {
         title: title,
         textData: questions,
       });
@@ -69,7 +69,7 @@ const CreateChapterForm = ({
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:3000/gen", {
+      const response = await fetch("https://divide-and-conquer-production.up.railway.app/gen", {
         method: "POST",
         body: formData,
       });

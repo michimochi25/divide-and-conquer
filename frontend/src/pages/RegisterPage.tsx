@@ -17,7 +17,7 @@ const RegisterPage = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const resp = await axios.post("http://localhost:3000/register", {
+      const resp = await axios.post("https://divide-and-conquer-production.up.railway.app/register", {
         name: name,
         isAdmin: role === "STUDENT" ? false : true,
         email: email,

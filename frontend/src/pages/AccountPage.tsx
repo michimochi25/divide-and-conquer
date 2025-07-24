@@ -15,7 +15,7 @@ const AccountPage = () => {
   const getUser = async () => {
     try {
       const user = await axios.get(
-        `http://localhost:3000/user/${userData?._id}`
+        `https://divide-and-conquer-production.up.railway.app/user/${userData?._id}`
       );
       if (!user || !user.data) {
         throw new Error("User data not found");
@@ -29,7 +29,7 @@ const AccountPage = () => {
   const updateUser = async () => {
     try {
       const resp = await axios.put(
-        `http://localhost:3000/user/${userData?._id}`,
+        `https://divide-and-conquer-production.up.railway.app/user/${userData?._id}`,
         {
           data: userData,
         }

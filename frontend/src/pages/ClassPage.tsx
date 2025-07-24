@@ -24,7 +24,7 @@ const ClassPage = () => {
   const fetchChapters = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/course/${classId}/chapters`
+        `https://divide-and-conquer-production.up.railway.app/course/${classId}/chapters`
       );
       console.log("Fetched chapters:", response.data);
       setChapters(response.data.chapters);
@@ -36,7 +36,7 @@ const ClassPage = () => {
   const getCourseInfo = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/course/${classId}`
+        `https://divide-and-conquer-production.up.railway.app/course/${classId}`
       );
       console.log("Fetched course info:", response.data);
       setData(response.data.course);

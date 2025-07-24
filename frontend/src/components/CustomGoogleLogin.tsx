@@ -21,7 +21,7 @@ const CustomGoogleLogin = () => {
         );
 
         const resp = await axios.get(
-          `http://localhost:3000/user/email/${userInfoRes.data.email}`
+          `https://divide-and-conquer-production.up.railway.app/user/email/${userInfoRes.data.email}`
         );
 
         if (resp.data.exists) {

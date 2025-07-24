@@ -44,7 +44,7 @@ export const AuthProvider = ({
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/user/${userId}`
+          `https://divide-and-conquer-production.up.railway.app/user/${userId}`
         );
         setUserData(response.data.user);
       } catch (error) {

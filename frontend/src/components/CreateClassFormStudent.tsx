@@ -28,7 +28,7 @@ const CreateClassFormStudent = ({
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/user/${userData?._id}/courses`,
+        `https://divide-and-conquer-production.up.railway.app/user/${userData?._id}/courses`,
         {
           courseId: id,
         }

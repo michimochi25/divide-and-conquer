@@ -25,7 +25,7 @@ const ClassPage = () => {
     // Fetch the classes for the user
     try {
       const response = await axios.get(
-        `http://localhost:3000/user/${userData?._id}/courses`
+        `https://divide-and-conquer-production.up.railway.app/user/${userData?._id}/courses`
       );
 
       if (response.data && Array.isArray(response.data.courses)) {

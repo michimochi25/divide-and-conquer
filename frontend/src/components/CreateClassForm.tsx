@@ -41,7 +41,7 @@ const CreateClassForm = ({
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/add-course", {
+      const response = await axios.post("https://divide-and-conquer-production.up.railway.app/add-course", {
         userId: userData?._id,
         title,
         description,

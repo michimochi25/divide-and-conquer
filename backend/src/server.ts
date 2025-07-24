@@ -196,7 +196,7 @@ const startServer = async () => {
 };
 
 // audio usage
-// curl -X POST http://localhost:3000/gen-speech \
+// curl -X POST https://divide-and-conquer-production.up.railway.app/gen-speech \
 // -H "Content-Type: application/json" \
 // -d '{"text": "Joe: Hows it going today Jane?"}' \
 // -o output.wav
