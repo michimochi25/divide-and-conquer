@@ -4,6 +4,7 @@ import { Input } from "../components/Input";
 import { BackButton } from "../components/BackButton";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useErrorContext } from "../ErrorContext";
 
 const RegisterPage = () => {
   const [role, setRole] = useState("");
@@ -11,22 +12,26 @@ const RegisterPage = () => {
 
   const location = useLocation();
   const { email, token } = location.state;
+  const { setErrorMsg } = useErrorContext();
 
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const resp = await axios.post("http://localhost:3000/register", {
-        name: name,
-        isAdmin: role === "STUDENT" ? false : true,
-        email: email,
-      });
+      const resp = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/register`,
+        {
+          name: name,
+          isAdmin: role === "STUDENT" ? false : true,
+          email: email,
+        }
+      );
       console.log("Registration successful", resp.data);
       localStorage.setItem("token", token);
       navigate(`/user/${resp.data.userId}`);
     } catch (error) {
-      setErrorMsg("Registration failed:", error);
+      setErrorMsg("Registration failed");
     }
   };
 

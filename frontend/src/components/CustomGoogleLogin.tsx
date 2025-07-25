@@ -21,7 +21,9 @@ const CustomGoogleLogin = () => {
         );
 
         const resp = await axios.get(
-          `http://localhost:3000/user/email/${userInfoRes.data.email}`
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/email/${
+            userInfoRes.data.email
+          }`
         );
 
         if (resp.data.exists) {

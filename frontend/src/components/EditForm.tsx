@@ -24,7 +24,7 @@ const EditForm = ({
 
     try {
       const resp = await axios.get(
-        `http://localhost:3000/chapter/${chapterId}`
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/chapter/${chapterId}`
       );
       setQuestions(resp.data.chapter.question);
       setTitle(resp.data.chapter.title);
@@ -36,7 +36,9 @@ const EditForm = ({
   const updateChapter = async () => {
     try {
       const resp = await axios.put(
-        `http://localhost:3000/chapter/${chapterId}`,
+        `${
+          import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+        }/chapter/${chapterId}`,
         { title: title, questions: questions }
       );
       console.log("Chapter saved successfully:", resp.data);
