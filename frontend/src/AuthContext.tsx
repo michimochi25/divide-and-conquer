@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useErrorContext } from "./ErrorContext";
 
 type AuthContextType = {
   userData: User | undefined;
@@ -31,6 +32,7 @@ export const AuthProvider = ({
 }) => {
   const [userData, setUserData] = useState<User | undefined>();
   const [isLoading, setIsLoading] = useState(true);
+  const { setErrorMsg } = useErrorContext();
   const navigate = useNavigate();
 
   const logout = () => {
@@ -48,7 +50,7 @@ export const AuthProvider = ({
         );
         setUserData(response.data.user);
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
+        setErrorMsg("Failed to fetch user data");
         setUserData(undefined);
       }
       setIsLoading(false);
@@ -61,7 +63,14 @@ export const AuthProvider = ({
   }, [userId]);
 
   return (
-    <AuthContext.Provider value={{ userData, setUserData, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{
+        userData,
+        setUserData,
+        logout,
+        isLoading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

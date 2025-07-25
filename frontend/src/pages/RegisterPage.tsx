@@ -26,7 +26,7 @@ const RegisterPage = () => {
       localStorage.setItem("token", token);
       navigate(`/user/${resp.data.userId}`);
     } catch (error) {
-      console.error("Registration failed:", error);
+      setErrorMsg("Registration failed:", error);
     }
   };
 

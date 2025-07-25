@@ -10,6 +10,7 @@ import { useScene } from "../SceneContext";
 import { useAuth } from "../AuthContext";
 import type { ClassData } from "./ClassesPage";
 import { EditForm } from "../components/EditForm";
+import { useErrorContext } from "../ErrorContext";
 
 const ClassPage = () => {
   const navigate = useNavigate();
@@ -19,12 +20,18 @@ const ClassPage = () => {
   const [editChapter, setEditChapter] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
-  const classId = useParams().classId || data._id;
+  const classId = useParams().classId;
   const { setChapterData } = useChapter();
   const { userData } = useAuth();
   const { setSceneData } = useScene();
+  const { setErrorMsg } = useErrorContext();
 
   const fetchChapters = async () => {
+    console.log("Fetching chapters for classId:", classId);
+    if (!classId) {
+      return;
+    }
+
     try {
       const response = await axios.get(
         `http://localhost:3000/course/${classId}/chapters`
@@ -33,7 +40,7 @@ const ClassPage = () => {
       setChapters(response.data.chapters);
       setChapterData(response.data.chapters[0]);
     } catch (error) {
-      console.error("Error fetching chapters:", error);
+      setErrorMsg("Error fetching chapters");
     }
   };
 
@@ -46,7 +53,7 @@ const ClassPage = () => {
       setData(response.data.course);
       return response.data.course;
     } catch (error) {
-      console.error("Error fetching course info:", error);
+      setErrorMsg("Error fetching course info");
       return null;
     }
   };
@@ -56,7 +63,7 @@ const ClassPage = () => {
     if (Object.keys(data).length === 0) {
       getCourseInfo();
     }
-  }, []);
+  }, [classId]);
 
   const nextPage = async (index: number) => {
     await fetchChapters();
@@ -78,7 +85,7 @@ const ClassPage = () => {
         </div>
         {viewForm ? (
           <CreateChapterForm
-            classId={classId}
+            classId={classId as string}
             setViewForm={setViewForm}
             fetchChapters={fetchChapters}
           />

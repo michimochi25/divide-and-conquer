@@ -8,6 +8,7 @@ import { Input } from "./Input";
 import { Button } from "./Button";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
+import { useErrorContext } from "../ErrorContext";
 
 const CreateClassFormStudent = ({
   setShowForm,
@@ -18,11 +19,12 @@ const CreateClassFormStudent = ({
 }) => {
   const [id, setId] = useState("");
   const { userData } = useAuth();
+  const { setErrorMsg } = useErrorContext();
 
   const handleEnrolClass = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!id || id.trim() === "") {
-      console.error("Class ID is required");
+      setErrorMsg("Class ID is required");
       return;
     }
 
@@ -41,7 +43,7 @@ const CreateClassFormStudent = ({
       updateData();
       setShowForm(false);
     } catch (error) {
-      console.error("Error creating class:", error);
+      setErrorMsg("Error creating class");
     }
   };
 

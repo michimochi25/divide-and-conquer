@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import CreateClassForm from "../components/CreateClassForm";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
+import { useErrorContext } from "../ErrorContext";
 
 export type ClassData = {
   _id: string;
@@ -17,6 +18,7 @@ const ClassPage = () => {
   const [data, setData] = useState<ClassData[]>([]);
   const [showForm, setShowForm] = useState(false);
   const { userData } = useAuth();
+  const { setErrorMsg } = useErrorContext();
 
   const navigate = useNavigate();
   const url = window.location.pathname;
@@ -31,10 +33,10 @@ const ClassPage = () => {
       if (response.data && Array.isArray(response.data.courses)) {
         setData(response.data.courses);
       } else {
-        console.error("Unexpected data format:", response.data.courses);
+        setErrorMsg("Unexpected data format");
       }
     } catch (error) {
-      console.error("Error fetching courses:", error);
+      setErrorMsg("Error fetching courses");
     }
   };
 

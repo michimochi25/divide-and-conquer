@@ -4,6 +4,7 @@ import { EditComponent } from "./EditComponent";
 import axios from "axios";
 import { Button } from "./Button";
 import { Input } from "./Input";
+import { useErrorContext } from "../ErrorContext";
 
 const EditForm = ({
   chapterId,
@@ -14,8 +15,13 @@ const EditForm = ({
 }) => {
   const [title, setTitle] = useState("");
   const [questions, setQuestions] = useState<Question[]>([]);
+  const { setErrorMsg } = useErrorContext();
 
   const getChapter = async () => {
+    if (!chapterId) {
+      return;
+    }
+
     try {
       const resp = await axios.get(
         `http://localhost:3000/chapter/${chapterId}`
@@ -23,7 +29,7 @@ const EditForm = ({
       setQuestions(resp.data.chapter.question);
       setTitle(resp.data.chapter.title);
     } catch (error) {
-      console.error("Error fetching chapter:", error);
+      setErrorMsg("Error fetching chapter");
     }
   };
 
@@ -36,7 +42,7 @@ const EditForm = ({
       console.log("Chapter saved successfully:", resp.data);
       close();
     } catch (error) {
-      console.error("Error saving chapter:", error);
+      setErrorMsg("Error saving chapter");
     }
   };
 

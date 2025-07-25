@@ -5,6 +5,7 @@ import { Button } from "./Button";
 import axios from "axios";
 import { Input } from "./Input";
 import { CircularProgress } from "@mui/material";
+import { useErrorContext } from "../ErrorContext";
 
 const CreateChapterForm = ({
   classId,
@@ -15,6 +16,7 @@ const CreateChapterForm = ({
   setViewForm: Dispatch<SetStateAction<boolean>>;
   fetchChapters: () => Promise<void>;
 }) => {
+  const { setErrorMsg } = useErrorContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
@@ -32,12 +34,12 @@ const CreateChapterForm = ({
   const addChapter = async () => {
     try {
       if (!title || title.trim() === "") {
-        console.error("Title is required");
+        setErrorMsg("Title is required");
         return;
       }
 
       if (!file) {
-        console.error("File is required");
+        setErrorMsg("File is required");
         return;
       }
 
@@ -55,13 +57,13 @@ const CreateChapterForm = ({
       setTitle("");
       setSubmitted(false);
     } catch (error) {
-      console.error("Error adding chapter:", error);
+      setErrorMsg("Error adding chapter");
     }
   };
 
   const generateQuestions = async () => {
     if (!file) {
-      console.error("No file submitted");
+      setErrorMsg("No file submitted");
       return "";
     }
 
@@ -82,7 +84,7 @@ const CreateChapterForm = ({
       console.log(`[Frontend - generateQuestions] ${data}`);
       return data;
     } catch (error) {
-      console.error("Error processing file:", error);
+      setErrorMsg(`Error processing file: ${error}`);
       // Re-throw the error or return a specific error value
       throw error;
     }

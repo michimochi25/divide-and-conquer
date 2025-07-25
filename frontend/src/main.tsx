@@ -7,6 +7,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ChapterProvider } from "./ChapterContext.tsx";
 import { SceneProvider } from "./SceneContext.tsx";
 import AuthWrapper from "./AuthWrapper.tsx";
+import { ErrorProvider } from "./ErrorContext.tsx";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -17,13 +18,15 @@ if (!clientId) {
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <StrictMode>
-      <ChapterProvider>
-        <SceneProvider>
-          <GoogleOAuthProvider clientId={clientId}>
-            <App />
-          </GoogleOAuthProvider>
-        </SceneProvider>
-      </ChapterProvider>
+      <ErrorProvider>
+        <ChapterProvider>
+          <SceneProvider>
+            <GoogleOAuthProvider clientId={clientId}>
+              <App />
+            </GoogleOAuthProvider>
+          </SceneProvider>
+        </ChapterProvider>
+      </ErrorProvider>
     </StrictMode>
   </BrowserRouter>
 );

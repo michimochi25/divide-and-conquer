@@ -11,19 +11,21 @@ import GooglePage from "./pages/GooglePage";
 import QuestionPage from "./pages/QuestionPage";
 import DialoguePage from "./pages/DialoguePage";
 import AuthWrapper from "./AuthWrapper";
-import ProtectedRoute from "./pages/ProtectedRoute";
 import ErrorPage from "./pages/ErrorPage";
-import UnauthenticatedPage from "./pages/UnauthenticatedPage";
-import { useState } from "react";
 import { ErrorContainer } from "./components/ErrorContainer";
 import GameLayout from "./pages/GameLayout";
-import { EditComponent } from "./components/EditComponent";
-import { EditForm } from "./components/EditForm";
+import { useErrorContext } from "./ErrorContext";
 
 function App() {
-  const [error, setError] = useState<string>("");
+  const { errorMsg } = useErrorContext();
+
   return (
     <>
+      {errorMsg.length !== 0 && (
+        <div className="absolute z-999 w-screen h-screen top-0">
+          <ErrorContainer message={errorMsg} alert={true} />
+        </div>
+      )}
       <Routes>
         <Route
           path="/"
@@ -76,7 +78,6 @@ function App() {
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>
-      {error.length !== 0 && <ErrorContainer message={error} />}
     </>
   );
 }
