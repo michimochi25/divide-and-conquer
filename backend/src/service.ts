@@ -122,6 +122,7 @@ export async function addChapter(
     createdAt: new Date(),
     question: questions,
     storyData: finalStoryData,
+    scenes: scenes,
   };
 
   console.log("[Backend] Chapter object created successfully.");
@@ -242,4 +243,40 @@ export async function getCourseInfo(courseId: string) {
   }
 
   return { course: course };
+}
+
+export async function updateChapter(
+  chapterId: string,
+  title: string,
+  questions: Question[]
+) {
+  const chapter = await chaptersCollection.findOne({
+    _id: new ObjectId(chapterId),
+  });
+
+  if (!chapter || chapter === undefined) {
+    throw new Error(`ID ${chapterId} CHAPTER_DOES_NOT_EXIST`);
+  }
+
+  const finalStoryData = integrateChallengesIntoStory(
+    chapter.scenes,
+    questions
+  );
+
+  const updatedChapter = {
+    title: title,
+    question: questions,
+    scenes: chapter.scenes,
+    storyData: finalStoryData,
+    courseId: chapter.courseId,
+    createdAt: chapter.createdAt,
+  };
+
+  const result = await chaptersCollection.findOneAndUpdate(
+    { _id: new ObjectId(chapterId) },
+    { $set: updatedChapter },
+    { returnDocument: "after" }
+  );
+
+  return updatedChapter;
 }

@@ -23,7 +23,7 @@ export async function connectDb() {
     console.log(`Successfully connected to database: ${db.databaseName}`);
 
     // reset database
-    await db.dropDatabase();
+    // await db.dropDatabase();
 
     // Initialize collections
     usersCollection = db.collection("users");

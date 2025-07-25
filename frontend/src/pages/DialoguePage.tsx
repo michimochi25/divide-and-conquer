@@ -86,16 +86,16 @@ const DialoguePage = () => {
         }}
       >
         <Container
-          className="px-5 absolute bottom-0 sm:right-50 sm:translate-x-45 sm:m-5 p-5 w-full sm:w-11/12 items-start justify-start"
+          className="animate-in select-none px-5 absolute bottom-0 sm:right-50 sm:translate-x-45 sm:m-5 p-5 w-full sm:w-11/12 items-start justify-start"
           children={
             <div className="relative flex flex-col items-center justify-center h-full gap-5 w-full">
-              <div className="grid grid-cols-[1fr_2fr] text-center items-center gap-2 w-full">
+              <div className="grid grid-cols-[1fr_2fr] text-center gap-2 w-full">
                 <div className="w-[15%]">
                   <div
                     className={twMerge("sprite ", `sprite-${userData?.avatar}`)}
                   />
                 </div>
-                <div className="text-left">
+                <div className="flex flex-col text-left gap-3 pt-10">
                   <p className="font-bold text-left text-2xl">
                     {" "}
                     {userData?.name}{" "}

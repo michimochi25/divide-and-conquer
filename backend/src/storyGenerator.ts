@@ -28,6 +28,7 @@ export interface Chapter {
   createdAt: Date;
   question: Question[];
   storyData: StoryDataItem[];
+  scenes: Scene[];
   _id: string;
 }
 

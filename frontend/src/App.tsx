@@ -17,6 +17,8 @@ import UnauthenticatedPage from "./pages/UnauthenticatedPage";
 import { useState } from "react";
 import { ErrorContainer } from "./components/ErrorContainer";
 import GameLayout from "./pages/GameLayout";
+import { EditComponent } from "./components/EditComponent";
+import { EditForm } from "./components/EditForm";
 
 function App() {
   const [error, setError] = useState<string>("");
@@ -27,9 +29,7 @@ function App() {
           path="/"
           element={
             <AuthWrapper>
-              {/* <UnauthenticatedPage> */}
               <LandingPage />
-              {/* </UnauthenticatedPage> */}
             </AuthWrapper>
           }
         />
@@ -37,9 +37,7 @@ function App() {
           path="/signin"
           element={
             <AuthWrapper>
-              {/* <UnauthenticatedPage> */}
               <GooglePage />
-              {/* </UnauthenticatedPage> */}
             </AuthWrapper>
           }
         />
@@ -47,9 +45,7 @@ function App() {
           path="/register"
           element={
             <AuthWrapper>
-              {/* <UnauthenticatedPage> */}
               <RegisterPage />
-              {/* </UnauthenticatedPage> */}
             </AuthWrapper>
           }
         />
@@ -68,9 +64,7 @@ function App() {
           path="/user/:userId"
           element={
             <AuthWrapper>
-              {/* <ProtectedRoute> */}
               <AccountLayout />
-              {/* </ProtectedRoute> */}
             </AuthWrapper>
           }
         >

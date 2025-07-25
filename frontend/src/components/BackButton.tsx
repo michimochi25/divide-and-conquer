@@ -12,7 +12,7 @@ const BackButton = ({ back }: { back?: boolean }) => {
 
   return (
     <button
-      className="absolute top-4 left-4"
+      className="icon-button absolute top-4 left-4"
       onClick={() => (back ? navigate(-1) : navigate(path))}
     >
       <img

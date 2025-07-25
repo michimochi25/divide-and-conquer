@@ -115,6 +115,24 @@ app.get(
   }
 );
 
+app.put(
+  "/chapter/:chapterId",
+  async function updateChapter(req: Request, res: Response) {
+    try {
+      const chapterId = req.params.chapterId;
+      const { title, questions } = req.body;
+      const updatedChapter = await service.updateChapter(
+        chapterId,
+        title,
+        questions
+      );
+      res.json(updatedChapter);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+);
+
 app.post(
   "/course/:courseId/add-chapter",
   async function addChapter(req: Request, res: Response) {
