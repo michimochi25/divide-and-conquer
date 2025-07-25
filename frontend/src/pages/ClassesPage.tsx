@@ -27,7 +27,9 @@ const ClassPage = () => {
     // Fetch the classes for the user
     try {
       const response = await axios.get(
-        `http://localhost:3000/user/${userData?._id}/courses`
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/${
+          userData?._id
+        }/courses`
       );
 
       if (response.data && Array.isArray(response.data.courses)) {

@@ -46,7 +46,7 @@ export const AuthProvider = ({
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/user/${userId}`
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/${userId}`
         );
         setUserData(response.data.user);
       } catch (error) {

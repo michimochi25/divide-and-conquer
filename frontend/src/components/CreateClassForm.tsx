@@ -43,11 +43,14 @@ const CreateClassForm = ({
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/add-course", {
-        userId: userData?._id,
-        title,
-        description,
-      });
+      const response = await axios.post(
+        "${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/add-course",
+        {
+          userId: userData?._id,
+          title,
+          description,
+        }
+      );
 
       if (!response.data) {
         throw new Error("Failed to create class");

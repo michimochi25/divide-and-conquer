@@ -30,7 +30,9 @@ const CreateClassFormStudent = ({
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/user/${userData?._id}/courses`,
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/${
+          userData?._id
+        }/courses`,
         {
           courseId: id,
         }

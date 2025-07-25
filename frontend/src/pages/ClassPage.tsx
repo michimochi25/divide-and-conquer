@@ -34,7 +34,9 @@ const ClassPage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:3000/course/${classId}/chapters`
+        `${
+          import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+        }/course/${classId}/chapters`
       );
       console.log("Fetched chapters:", response.data);
       setChapters(response.data.chapters);
@@ -47,7 +49,7 @@ const ClassPage = () => {
   const getCourseInfo = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/course/${classId}`
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/course/${classId}`
       );
       console.log("Fetched course info:", response.data);
       setData(response.data.course);

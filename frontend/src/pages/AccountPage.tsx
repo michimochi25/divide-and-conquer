@@ -15,7 +15,9 @@ const AccountPage = () => {
   const getUser = async () => {
     try {
       const user = await axios.get(
-        `http://localhost:3000/user/${userData?._id}`
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/${
+          userData?._id
+        }`
       );
       if (!user || !user.data) {
         throw new Error("User data not found");
@@ -29,7 +31,9 @@ const AccountPage = () => {
   const updateUser = async () => {
     try {
       const resp = await axios.put(
-        `http://localhost:3000/user/${userData?._id}`,
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/${
+          userData?._id
+        }`,
         {
           data: userData,
         }

@@ -46,10 +46,15 @@ const CreateChapterForm = ({
       setSubmitted(true);
       const questions = await generateQuestions();
       console.log(`[Frontend - addChapter] ${questions}`);
-      await axios.post(`http://localhost:3000/course/${classId}/add-chapter`, {
-        title: title,
-        textData: questions,
-      });
+      await axios.post(
+        `${
+          import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+        }/course/${classId}/add-chapter`,
+        {
+          title: title,
+          textData: questions,
+        }
+      );
 
       setViewForm(false);
       fetchChapters();
@@ -71,10 +76,13 @@ const CreateChapterForm = ({
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:3000/gen", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/gen`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
