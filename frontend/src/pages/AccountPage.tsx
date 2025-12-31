@@ -6,10 +6,12 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
+import { useErrorContext } from "../ErrorContext";
 
 const AccountPage = () => {
   const navigate = useNavigate();
   const { userData, setUserData, logout } = useAuth();
+  const { setErrorMsg } = useErrorContext();
   const [avatarEditMode, setAvatarEditMode] = useState(false);
 
   const getUser = async () => {
@@ -31,9 +33,7 @@ const AccountPage = () => {
   const updateUser = async () => {
     try {
       const resp = await axios.put(
-        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/${
-          userData?._id
-        }`,
+        `http://localhost:3000/user/${userData?._id}`,
         {
           data: userData,
         }
