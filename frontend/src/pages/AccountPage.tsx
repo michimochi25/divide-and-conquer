@@ -26,7 +26,7 @@ const AccountPage = () => {
       }
       setUserData(user.data.user);
     } catch (error) {
-      setErrorMsg("Failed to fetch user data:", error);
+      setErrorMsg("Failed to fetch user data: " + error);
     }
   };
 
@@ -41,7 +41,7 @@ const AccountPage = () => {
       console.log("User data updated:", resp.data);
       setAvatarEditMode(!avatarEditMode);
     } catch (error) {
-      setErrorMsg("Failed to update user data:", error);
+      setErrorMsg("Failed to update user data: " + error);
     }
   };
 
