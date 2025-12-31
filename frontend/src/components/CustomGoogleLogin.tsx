@@ -3,10 +3,12 @@ import { GoogleButton } from "./GoogleButton";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import axios from "axios";
+import { useErrorContext } from "../ErrorContext";
 
 const CustomGoogleLogin = () => {
   const navigate = useNavigate();
   const { setUserData } = useAuth();
+  const { setErrorMsg } = useErrorContext();
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -21,9 +23,7 @@ const CustomGoogleLogin = () => {
         );
 
         const resp = await axios.get(
-          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/email/${
-            userInfoRes.data.email
-          }`
+          `http://localhost:3000/user/email/${userInfoRes.data.email}`
         );
 
         if (resp.data.exists) {
@@ -40,7 +40,7 @@ const CustomGoogleLogin = () => {
           });
         }
       } catch (error) {
-        setErrorMsg("Failed to fetch user info:", error);
+        setErrorMsg("Failed to fetch user info");
       }
     },
     onError: (error) => {
