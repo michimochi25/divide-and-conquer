@@ -1,3 +1,5 @@
+>⚠️ This project is not yet complete and no longer maintained (31/12/2025).
+
 # D&C: Divide and Conquer
 
 <div align="center">
